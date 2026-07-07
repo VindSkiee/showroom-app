@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.101.2",
+    "lightningcss-win32-x64-msvc": "^1.32.0",
     "lucide-react": "^1.23.0",
     "motion": "^12.42.2",
     "next": "16.2.10",
