@@ -24,8 +24,8 @@
 | Metric | Value |
 |--------|-------|
 | Total Sessions | 10 |
-| Done | 5/10 |
-| Current | S6 |
+| Done | 6/10 |
+| Current | S7 |
 | Last Updated | 2026-07-07 |
 
 ---
@@ -292,7 +292,7 @@ S0 (Foundation)
 
 ## S6: Motion & Animations
 
-**Status:** ⬜
+**Status:** ✅
 **Goal:** Animasi halus yang informative
 
 **Files:**
@@ -303,24 +303,46 @@ S0 (Foundation)
 | Create | `src/components/motion/stagger-list.tsx` | Stagger container |
 | Create | `src/components/motion/scroll-reveal.tsx` | Scroll reveal |
 | Create | `src/components/motion/page-transition.tsx` | Page transition |
-| Edit | Semua komponen | Tambah animasi |
+| Create | `src/components/motion/page-content.tsx` | Client page wrapper |
+| Create | `src/components/motion/scroll-reveal-wrapper.tsx` | Client scroll reveal wrapper |
+| Edit | `src/components/vehicle/vehicle-card.tsx` | whileHover/whileTap scale |
+| Edit | `src/components/vehicle/vehicle-grid.tsx` | Staggered entrance |
+| Edit | `src/components/ui/button.tsx` | CSS hover/tap scale |
+| Edit | `src/components/ui/whatsapp-button.tsx` | Slide-up entrance |
+| Edit | `src/components/filter/filter-sheet.tsx` | Slide-up + AnimatePresence |
+| Edit | `src/lib/motion-tokens.ts` | Fixed type assertion |
+| Edit | `src/app/(public)/page.tsx` | PageTransition wrapper |
+| Edit | `src/app/(public)/promo/page.tsx` | ScrollReveal per banner |
+| Edit | `src/app/(public)/vehicle/[id]/page.tsx` | PageTransition wrapper |
 
 **Verification:**
-- [ ] Card entrance: fadeUp + stagger
-- [ ] Button hover: scale(1.02)
-- [ ] Button tap: scale(0.98)
-- [ ] Bottom sheet: slide up animation
-- [ ] Scroll reveal di section promo
-- [ ] `useReducedMotion` cek berfungsi
+- [x] Card entrance: fadeUp + stagger
+- [x] Button hover: scale(1.02)
+- [x] Button tap: scale(0.98)
+- [x] Bottom sheet: slide up animation
+- [x] Scroll reveal di section promo
+- [x] `useReducedMotion` cek berfungsi
+- [x] `npm run build` tanpa error
 
 **Log:**
-- (diisi saat selesai)
+- Created 6 motion components: FadeUp, FadeIn, StaggerList, StaggerItem, ScrollReveal, PageTransition
+- Created client wrappers: PageContent, ScrollRevealWrapper for server component pages
+- VehicleCard: motion whileHover/whileTap with spring animation
+- VehicleGrid: StaggerList/StaggerItem for staggered entrance
+- Button: CSS transitions for hover/tap scale (avoided motion.button type conflicts)
+- WhatsAppButton: motion slide-up entrance with delay
+- FilterSheet: motion slide-up with AnimatePresence for mount/unmount
+- All animations respect useReducedMotion preference
+- Fixed motionTokens.ts type assertion for spring type
 
 **Issues:**
-- (diisi saat ada masalah)
+- motion.button type conflict with HTML button props (resolved with CSS transitions)
+- slideUpVariants type error with spring type string (resolved with `as const`)
 
 **Notes:**
-- (diisi untuk sesi berikutnya)
+- motionTokens.ts provides all animation values - no hardcoded values
+- useReducedMotion checked in every animated component
+- Page transitions are subtle fade-in for smooth page feel
 
 ---
 
