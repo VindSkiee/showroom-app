@@ -1,13 +1,32 @@
+import { Suspense } from "react";
 import { Container } from "@/components/ui/container";
 import { VehicleGrid } from "@/components/vehicle/vehicle-grid";
+import { SearchInput } from "@/components/filter/search-input";
+import { FilterChips } from "@/components/filter/filter-chips";
+import { FilterSheet } from "@/components/filter/filter-sheet";
 import { getVehicles } from "@/lib/strapi";
-import type { Vehicle } from "@/lib/types";
+import type { Vehicle, VehicleType, VehicleStatus } from "@/lib/types";
 
-export default async function CatalogPage() {
+interface CatalogPageProps {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}
+
+export default async function CatalogPage({ searchParams }: CatalogPageProps) {
+  const params = await searchParams;
+
   let vehicles: Vehicle[] = [];
+  let totalCount = 0;
+
   try {
-    const res = await getVehicles({ pageSize: 20 });
+    const res = await getVehicles({
+      name: params.q || undefined,
+      type: (params.type as VehicleType) || undefined,
+      status: (params.status as VehicleStatus) || undefined,
+      sort: params.sort || "createdAt:desc",
+      pageSize: 20,
+    });
     vehicles = res.data;
+    totalCount = res.meta.pagination?.total || res.data.length;
   } catch {
     // Strapi not reachable - show empty state
   }
@@ -25,14 +44,57 @@ export default async function CatalogPage() {
           </p>
         </div>
 
+        {/* Search + Filter Bar */}
+        <div className="mb-4 flex gap-3">
+          <div className="flex-1">
+            <Suspense>
+              <SearchInput />
+            </Suspense>
+          </div>
+          <FilterSheet />
+        </div>
+
+        {/* Type Filter Chips */}
+        <div className="mb-6">
+          <Suspense>
+            <FilterChips />
+          </Suspense>
+        </div>
+
+        {/* Result count */}
+        {vehicles.length > 0 && (
+          <p className="mb-4 text-sm text-ink-muted">
+            {totalCount} motor ditemukan
+          </p>
+        )}
+
         {/* Grid */}
         {vehicles.length > 0 ? (
           <VehicleGrid vehicles={vehicles} />
         ) : (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <p className="text-lg text-ink-muted">Belum ada motor tersedia</p>
+            <svg
+              className="mb-4 h-12 w-12 text-ink-muted"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+              />
+            </svg>
+            <p className="text-lg text-ink-muted">
+              {params.q
+                ? `Tidak ada motor untuk "${params.q}"`
+                : "Belum ada motor tersedia"}
+            </p>
             <p className="mt-2 text-sm text-ink-muted">
-              Silakan cek kembali nanti
+              {params.q
+                ? "Coba kata kunci lain"
+                : "Silakan cek kembali nanti"}
             </p>
           </div>
         )}
