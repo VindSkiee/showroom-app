@@ -1,3 +1,6 @@
+"use client";
+
+import { StaggerList, StaggerItem } from "@/components/motion/stagger-list";
 import { VehicleCard } from "./vehicle-card";
 import type { Vehicle } from "@/lib/types";
 
@@ -7,10 +10,12 @@ interface VehicleGridProps {
 
 export function VehicleGrid({ vehicles }: VehicleGridProps) {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <StaggerList className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {vehicles.map((vehicle) => (
-        <VehicleCard key={vehicle.id} vehicle={vehicle} />
+        <StaggerItem key={vehicle.id}>
+          <VehicleCard vehicle={vehicle} />
+        </StaggerItem>
       ))}
-    </div>
+    </StaggerList>
   );
 }

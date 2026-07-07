@@ -1,4 +1,8 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
 import { formatCurrency } from "@/lib/utils";
+import { motionTokens } from "@/lib/motion-tokens";
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6281234567890";
 
@@ -8,14 +12,22 @@ interface WhatsAppButtonProps {
 }
 
 export function WhatsAppButton({ vehicleName, price }: WhatsAppButtonProps) {
+  const prefersReduced = useReducedMotion();
   const message = `Halo, saya tertarik dengan ${vehicleName} seharga ${formatCurrency(price)}. Apakah masih tersedia?`;
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
   return (
-    <a
+    <motion.a
       href={url}
       target="_blank"
       rel="noopener noreferrer"
+      initial={prefersReduced ? undefined : { y: 100, opacity: 0 }}
+      animate={prefersReduced ? undefined : { y: 0, opacity: 1 }}
+      transition={{
+        type: "spring",
+        ...motionTokens.spring.gentle,
+        delay: motionTokens.duration.normal,
+      }}
       className="fixed bottom-0 left-0 right-0 z-50 border-t border-stone-200 bg-white/95 backdrop-blur-sm"
     >
       <div className="mx-auto flex max-w-2xl items-center justify-between px-4 py-3">
@@ -30,6 +42,6 @@ export function WhatsAppButton({ vehicleName, price }: WhatsAppButtonProps) {
           <span>WhatsApp</span>
         </div>
       </div>
-    </a>
+    </motion.a>
   );
 }

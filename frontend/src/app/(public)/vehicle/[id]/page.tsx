@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getVehicle } from "@/lib/strapi";
 import { VehicleDetail } from "@/components/vehicle/vehicle-detail";
+import { PageContent } from "@/components/motion/page-content";
 import type { Metadata } from "next";
 
 interface PageProps {
@@ -39,5 +40,9 @@ export default async function VehicleDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  return <VehicleDetail vehicle={vehicle} />;
+  return (
+    <PageContent>
+      <VehicleDetail vehicle={vehicle} />
+    </PageContent>
+  );
 }

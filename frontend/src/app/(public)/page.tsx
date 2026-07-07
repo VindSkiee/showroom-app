@@ -4,6 +4,8 @@ import { VehicleGrid } from "@/components/vehicle/vehicle-grid";
 import { SearchInput } from "@/components/filter/search-input";
 import { FilterChips } from "@/components/filter/filter-chips";
 import { FilterSheet } from "@/components/filter/filter-sheet";
+import { PageContent } from "@/components/motion/page-content";
+import { ScrollRevealWrapper } from "@/components/motion/scroll-reveal-wrapper";
 import { getVehicles } from "@/lib/strapi";
 import type { Vehicle, VehicleType, VehicleStatus } from "@/lib/types";
 
@@ -32,17 +34,20 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   }
 
   return (
-    <main className="py-6 sm:py-8">
-      <Container>
-        {/* Header */}
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl font-bold text-ink sm:text-3xl">
-            Katalog Motor
-          </h1>
-          <p className="mt-2 text-ink-muted">
-            Temukan motor bekas berkualitas dengan surat lengkap
-          </p>
-        </div>
+    <PageContent>
+      <main className="py-6 sm:py-8">
+        <Container>
+          {/* Header */}
+          <ScrollRevealWrapper>
+            <div className="mb-6 sm:mb-8">
+              <h1 className="text-2xl font-bold text-ink sm:text-3xl">
+                Katalog Motor
+              </h1>
+              <p className="mt-2 text-ink-muted">
+                Temukan motor bekas berkualitas dengan surat lengkap
+              </p>
+            </div>
+          </ScrollRevealWrapper>
 
         {/* Search + Filter Bar */}
         <div className="mb-4 flex gap-3">
@@ -98,7 +103,8 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
             </p>
           </div>
         )}
-      </Container>
-    </main>
+        </Container>
+      </main>
+    </PageContent>
   );
 }

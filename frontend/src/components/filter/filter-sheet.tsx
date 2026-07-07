@@ -2,7 +2,9 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState, useTransition } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { motionTokens, slideUpVariants } from "@/lib/motion-tokens";
 import type { VehicleType } from "@/lib/types";
 
 const STATUS_OPTIONS = [
@@ -35,6 +37,7 @@ export function FilterSheet() {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
+  const prefersReduced = useReducedMotion();
 
   const currentStatus = searchParams.get("status") || "all";
   const currentSort = searchParams.get("sort") || "newest";
@@ -94,89 +97,101 @@ export function FilterSheet() {
       </button>
 
       {/* Backdrop + Sheet */}
-      {isOpen && (
-        <div className="fixed inset-0 z-50">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setIsOpen(false)}
-          />
+      <AnimatePresence>
+        {isOpen && (
+          <div className="fixed inset-0 z-50">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: motionTokens.duration.fast }}
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setIsOpen(false)}
+            />
 
-          {/* Sheet */}
-          <div className="absolute inset-x-0 bottom-0 rounded-t-2xl bg-white p-6 pb-8">
-            {/* Handle */}
-            <div className="mb-6 flex justify-center">
-              <div className="h-1 w-10 rounded-full bg-stone-300" />
-            </div>
-
-            {/* Header */}
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-ink">Filter & Urutkan</h2>
-              <button
-                onClick={handleReset}
-                className="text-sm text-accent"
-              >
-                Reset
-              </button>
-            </div>
-
-            {/* Status */}
-            <div className="mb-6">
-              <h3 className="mb-3 text-sm font-medium text-ink-muted">
-                Status
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {STATUS_OPTIONS.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => setLocalStatus(option.value)}
-                    className={cn(
-                      "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                      localStatus === option.value
-                        ? "bg-accent text-white"
-                        : "bg-surface text-ink hover:bg-stone-200"
-                    )}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Sort */}
-            <div className="mb-8">
-              <h3 className="mb-3 text-sm font-medium text-ink-muted">
-                Urutkan
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {SORT_OPTIONS.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => setLocalSort(option.value)}
-                    className={cn(
-                      "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                      localSort === option.value
-                        ? "bg-accent text-white"
-                        : "bg-surface text-ink hover:bg-stone-200"
-                    )}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Apply */}
-            <button
-              onClick={handleApply}
-              disabled={isPending}
-              className="w-full rounded-xl bg-accent py-3 text-base font-medium text-white hover:bg-accent-hover"
+            {/* Sheet */}
+            <motion.div
+              initial={prefersReduced ? "visible" : "hidden"}
+              animate="visible"
+              exit="exit"
+              variants={prefersReduced ? undefined : slideUpVariants}
+              className="absolute inset-x-0 bottom-0 rounded-t-2xl bg-white p-6 pb-8"
             >
-              {isPending ? "Menerapkan..." : "Terapkan Filter"}
-            </button>
+              {/* Handle */}
+              <div className="mb-6 flex justify-center">
+                <div className="h-1 w-10 rounded-full bg-stone-300" />
+              </div>
+
+              {/* Header */}
+              <div className="mb-6 flex items-center justify-between">
+                <h2 className="text-lg font-bold text-ink">Filter & Urutkan</h2>
+                <button
+                  onClick={handleReset}
+                  className="text-sm text-accent"
+                >
+                  Reset
+                </button>
+              </div>
+
+              {/* Status */}
+              <div className="mb-6">
+                <h3 className="mb-3 text-sm font-medium text-ink-muted">
+                  Status
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {STATUS_OPTIONS.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setLocalStatus(option.value)}
+                      className={cn(
+                        "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                        localStatus === option.value
+                          ? "bg-accent text-white"
+                          : "bg-surface text-ink hover:bg-stone-200"
+                      )}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sort */}
+              <div className="mb-8">
+                <h3 className="mb-3 text-sm font-medium text-ink-muted">
+                  Urutkan
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {SORT_OPTIONS.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setLocalSort(option.value)}
+                      className={cn(
+                        "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                        localSort === option.value
+                          ? "bg-accent text-white"
+                          : "bg-surface text-ink hover:bg-stone-200"
+                      )}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Apply */}
+              <button
+                onClick={handleApply}
+                disabled={isPending}
+                className="w-full rounded-xl bg-accent py-3 text-base font-medium text-white hover:bg-accent-hover"
+              >
+                {isPending ? "Menerapkan..." : "Terapkan Filter"}
+              </button>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 }

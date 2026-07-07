@@ -60,7 +60,7 @@ export const slideUpVariants = {
   visible: {
     y: 0,
     transition: {
-      type: "spring",
+      type: "spring" as const,
       ...motionTokens.spring.gentle,
     },
   },
