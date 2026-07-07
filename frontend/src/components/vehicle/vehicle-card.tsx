@@ -19,7 +19,7 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
   const [imgError, setImgError] = useState(false);
 
   const imageUrl =
-    vehicle.images.length > 0 && !imgError
+    vehicle.images && vehicle.images.length > 0 && !imgError
       ? getStrapiImageUrl(vehicle.images[0].formats?.small?.url || vehicle.images[0].url)
       : null;
 

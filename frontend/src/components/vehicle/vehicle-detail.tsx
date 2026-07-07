@@ -30,7 +30,7 @@ function DefectCard({ defect }: { defect: DefectItem }) {
     <div className="rounded-xl bg-surface p-4">
       <span className="text-xs font-medium text-ink">{defect.part}</span>
       <p className="mt-1 text-sm text-ink-muted">{defect.description}</p>
-      {defect.images.length > 0 && !imgError && (
+      {defect.images && defect.images.length > 0 && !imgError && (
         <div className="mt-3 flex gap-2 overflow-x-auto">
           {defect.images.map((img) => (
             <div key={img.id} className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-stone-100">
@@ -69,11 +69,11 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
   const [mainImgError, setMainImgError] = useState(false);
 
   const mainImage =
-    vehicle.images.length > 0 && !mainImgError
+    vehicle.images && vehicle.images.length > 0 && !mainImgError
       ? getStrapiImageUrl(vehicle.images[0].formats?.large?.url || vehicle.images[0].url)
       : null;
 
-  const secondaryImages = vehicle.images.slice(1, 5);
+  const secondaryImages = (vehicle.images || []).slice(1, 5);
 
   return (
     <>
@@ -166,7 +166,7 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
         )}
 
         {/* Defects */}
-        {vehicle.defectStatus !== "none" && vehicle.defects.length > 0 && (
+        {vehicle.defectStatus !== "none" && vehicle.defects && vehicle.defects.length > 0 && (
           <>
             <div className="my-6 h-px bg-stone-200" />
             <div>

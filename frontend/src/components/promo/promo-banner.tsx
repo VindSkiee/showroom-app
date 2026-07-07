@@ -57,7 +57,7 @@ export function PromoBanner({ promo }: PromoBannerProps) {
         </div>
 
         {/* Related vehicles */}
-        {promo.vehicles.length > 0 && (
+        {promo.vehicles && promo.vehicles.length > 0 && (
           <div className="mt-4 border-t border-stone-200 pt-4">
             <p className="mb-3 text-xs font-medium text-ink-muted">
               Motor dalam promo ini:
