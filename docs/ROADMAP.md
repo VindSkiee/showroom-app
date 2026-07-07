@@ -24,8 +24,8 @@
 | Metric | Value |
 |--------|-------|
 | Total Sessions | 10 |
-| Done | 6/10 |
-| Current | S7 |
+| Done | 7/10 |
+| Current | S8 |
 | Last Updated | 2026-07-07 |
 
 ---
@@ -348,7 +348,7 @@ S0 (Foundation)
 
 ## S7: Polish & Error Handling
 
-**Status:** ⬜
+**Status:** ✅
 **Goal:** Production-ready quality
 
 **Files:**
@@ -359,23 +359,43 @@ S0 (Foundation)
 | Create | `src/app/(public)/error.tsx` | Error boundary |
 | Create | `src/app/(public)/loading.tsx` | Route loading |
 | Create | `src/components/ui/error-message.tsx` | Error display |
-| Edit | Semua komponen | Tambah error handling |
+| Create | `src/app/(public)/vehicle/[id]/not-found.tsx` | Vehicle 404 page |
+| Create | `src/app/(public)/vehicle/[id]/error.tsx` | Vehicle error boundary |
+| Create | `src/app/(public)/vehicle/[id]/loading.tsx` | Vehicle loading |
+| Create | `src/app/(public)/promo/loading.tsx` | Promo loading |
+| Edit | `src/components/vehicle/vehicle-card.tsx` | Image onError fallback |
+| Edit | `src/components/vehicle/vehicle-detail.tsx` | Image onError fallback |
+| Edit | `src/components/promo/promo-banner.tsx` | Image onError fallback |
 
 **Verification:**
-- [ ] 404 page untuk invalid vehicle ID
-- [ ] Error state jika Strapi down
-- [ ] Loading state di setiap halaman
-- [ ] Graceful fallback untuk missing images
-- [ ] `npm run build` tanpa warning
+- [x] 404 page untuk invalid vehicle ID
+- [x] Error state jika Strapi down
+- [x] Loading state di setiap halaman
+- [x] Graceful fallback untuk missing images
+- [x] `npm run build` tanpa warning
 
 **Log:**
-- (diisi saat selesai)
+- Created not-found.tsx - Global 404 with CTA back to catalog
+- Created error.tsx - Global error boundary with reset + navigate
+- Created loading.tsx - Global route loading with full skeleton
+- Created error-message.tsx - Reusable error display component
+- Created vehicle/[id]/not-found.tsx - Vehicle-specific 404
+- Created vehicle/[id]/error.tsx - Vehicle-specific error boundary
+- Created vehicle/[id]/loading.tsx - Vehicle detail skeleton
+- Created promo/loading.tsx - Promo page skeleton
+- Updated VehicleCard: useState + onError for image fallback
+- Updated VehicleDetail: useState + onError for main image + defect images
+- Updated PromoBanner: useState + onError for banner image
+- Build OK, all verifications passed
 
 **Issues:**
-- (diisi saat ada masalah)
+- None
 
 **Notes:**
-- (diisi untuk sesi berikutnya)
+- All error boundaries are client components ("use client")
+- Loading states match actual page skeletons
+- Image error handling uses useState + onError for graceful fallback
+- Error ID shown for debugging in production
 
 ---
 

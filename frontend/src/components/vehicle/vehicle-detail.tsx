@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { formatCurrency } from "@/lib/utils";
 import { getStrapiImageUrl } from "@/lib/strapi";
@@ -21,11 +24,13 @@ function InfoRow({ label, value, accent }: { label: string; value: string; accen
 }
 
 function DefectCard({ defect }: { defect: DefectItem }) {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div className="rounded-xl bg-surface p-4">
       <span className="text-xs font-medium text-ink">{defect.part}</span>
       <p className="mt-1 text-sm text-ink-muted">{defect.description}</p>
-      {defect.images.length > 0 && (
+      {defect.images.length > 0 && !imgError && (
         <div className="mt-3 flex gap-2 overflow-x-auto">
           {defect.images.map((img) => (
             <div key={img.id} className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-stone-100">
@@ -35,6 +40,7 @@ function DefectCard({ defect }: { defect: DefectItem }) {
                 fill
                 className="object-cover"
                 sizes="80px"
+                onError={() => setImgError(true)}
               />
             </div>
           ))}
@@ -60,8 +66,10 @@ function defectStatusLabel(status: Vehicle["defectStatus"]): string {
 }
 
 export function VehicleDetail({ vehicle }: VehicleDetailProps) {
+  const [mainImgError, setMainImgError] = useState(false);
+
   const mainImage =
-    vehicle.images.length > 0
+    vehicle.images.length > 0 && !mainImgError
       ? getStrapiImageUrl(vehicle.images[0].formats?.large?.url || vehicle.images[0].url)
       : null;
 
@@ -80,6 +88,7 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
               priority
               sizes="(max-width: 768px) 100vw, 672px"
               className="object-cover"
+              onError={() => setMainImgError(true)}
             />
           ) : (
             <div className="flex h-full items-center justify-center text-ink-muted">

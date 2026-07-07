@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
@@ -15,9 +16,10 @@ interface VehicleCardProps {
 
 export function VehicleCard({ vehicle }: VehicleCardProps) {
   const prefersReduced = useReducedMotion();
+  const [imgError, setImgError] = useState(false);
 
   const imageUrl =
-    vehicle.images.length > 0
+    vehicle.images.length > 0 && !imgError
       ? getStrapiImageUrl(vehicle.images[0].formats?.small?.url || vehicle.images[0].url)
       : null;
 
@@ -43,6 +45,7 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
+              onError={() => setImgError(true)}
             />
           ) : (
             <div className="flex h-full items-center justify-center text-ink-muted">

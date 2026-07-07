@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
@@ -9,9 +12,12 @@ interface PromoBannerProps {
 }
 
 export function PromoBanner({ promo }: PromoBannerProps) {
-  const bannerUrl = promo.banner
-    ? getStrapiImageUrl(promo.banner.formats?.large?.url || promo.banner.url)
-    : null;
+  const [imgError, setImgError] = useState(false);
+
+  const bannerUrl =
+    promo.banner && !imgError
+      ? getStrapiImageUrl(promo.banner.formats?.large?.url || promo.banner.url)
+      : null;
 
   return (
     <div className="overflow-hidden rounded-2xl bg-surface">
@@ -24,6 +30,7 @@ export function PromoBanner({ promo }: PromoBannerProps) {
             fill
             sizes="(max-width: 640px) 100vw, 50vw"
             className="object-cover"
+            onError={() => setImgError(true)}
           />
         </div>
       )}
