@@ -407,8 +407,8 @@ S0 (Foundation)
 **Files:** Tidak ada file baru
 
 **Verification:**
-- [ ] Seed 5-10 kendaraan di Strapi admin
-- [ ] Seed 2-3 promo
+- [x] Seed 5-10 kendaraan di Strapi admin
+- [x] Seed 2-3 promo
 - [ ] Data motor muncul semua di catalog
 - [ ] Filter berfungsi dengan data real
 - [ ] Detail semua field muncul
@@ -426,15 +426,23 @@ S0 (Foundation)
 - Linked 4 vehicles to promos
 - All vehicles published and API verified working
 - `npm run build` frontend OK tanpa error
+- Fixed null safety for images/defects (Strapi returns null not [] for empty media)
+- Fixed detail page 404: Strapi v5 uses `documentId` (string) for findOne, not numeric `id`
+- Renamed route `[id]` → `[documentId]` for detail page
+- Updated `getVehicle` to accept documentId + `?populate=*` for relations
+- Updated all vehicle links (VehicleCard, PromoBanner) to use `documentId`
 
 **Issues:**
 - esbuild platform mismatch (Windows vs WSL) - resolved by reinstalling node_modules
 - Strapi routes not registered - resolved by converting .js to .ts files
 - `status` field reserved in Strapi v5 - renamed to `availabilityStatus`
+- Strapi v5 findOne uses `documentId` not numeric `id` - resolved by renaming route param
+- `vehicle.images` null when no media uploaded - resolved with null safety checks
 
 **Notes:**
 - Seed data requires Strapi running on Windows (WSL can't access Strapi dev server)
 - All vehicles use `availabilityStatus` field instead of `status`
+- Strapi v5 API: `/api/vehicles/:documentId` (string), not `/api/vehicles/:id` (numeric)
 
 ---
 
