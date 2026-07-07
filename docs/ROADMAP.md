@@ -24,8 +24,8 @@
 | Metric | Value |
 |--------|-------|
 | Total Sessions | 10 |
-| Done | 3/10 |
-| Current | S3 |
+| Done | 4/10 |
+| Current | S4 |
 | Last Updated | 2026-07-07 |
 
 ---
@@ -178,7 +178,7 @@ S0 (Foundation)
 
 ## S3: Filter & Search
 
-**Status:** ⬜
+**Status:** ✅
 **Goal:** User bisa filter dan search motor
 
 **Files:**
@@ -192,20 +192,30 @@ S0 (Foundation)
 | Edit | `src/app/(public)/page.tsx` | Integrate filters + searchParams |
 
 **Verification:**
-- [ ] Search by name berfungsi
-- [ ] Filter by type berfungsi
-- [ ] Filter chips responsive (scroll horizontal di mobile)
-- [ ] Bottom sheet filter muncul di mobile
-- [ ] URL update dengan query params
+- [x] Search by name berfungsi
+- [x] Filter by type berfungsi
+- [x] Filter chips responsive (scroll horizontal di mobile)
+- [x] Bottom sheet filter muncul di mobile
+- [x] URL update dengan query params
 
 **Log:**
-- (diisi saat selesai)
+- Created `search-input.tsx` - Search bar with debounced URL updates + loading spinner
+- Created `filter-chips.tsx` - Horizontal scroll chips for VehicleType filter
+- Created `filter-sheet.tsx` - Bottom sheet modal for status + sort filter
+- Created `useFilters.ts` - Generic hook for filter state via URL searchParams
+- Updated `page.tsx` - Integrated all filters, shows result count, improved empty state
+- Build OK, all verifications passed
 
 **Issues:**
-- (diisi saat ada masalah)
+- None
 
 **Notes:**
-- (diisi untuk sesi berikutnya)
+- Uses URL searchParams for server-side filtering (SSR compatible)
+- Search updates URL on input (debounced via transition)
+- Filter chips: scrollable horizontal, accent color for active
+- Bottom sheet: manual implementation (no radix), slide-up with backdrop
+- Sort options: Terbaru, Harga Terendah, Harga Tertinggi
+- Status filter: Semua, Tersedia, Terjual
 
 ---
 
