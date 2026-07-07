@@ -24,8 +24,8 @@
 | Metric | Value |
 |--------|-------|
 | Total Sessions | 10 |
-| Done | 4/10 |
-| Current | S5 |
+| Done | 5/10 |
+| Current | S6 |
 | Last Updated | 2026-07-07 |
 
 ---
@@ -258,7 +258,7 @@ S0 (Foundation)
 
 ## S5: Promo Page
 
-**Status:** ⬜
+**Status:** ✅
 **Goal:** Halaman promo dari Strapi
 
 **Files:**
@@ -269,20 +269,24 @@ S0 (Foundation)
 | Edit | `src/app/(public)/promo/page.tsx` | Promo page SSR |
 
 **Verification:**
-- [ ] Promo page menampilkan active promos
-- [ ] Banner gambar muncul
-- [ ] Discount badge terlihat
-- [ ] Link ke vehicle yang dipromo berfungsi
-- [ ] Empty state jika tidak ada promo
+- [x] Promo page menampilkan active promos
+- [x] Banner gambar muncul
+- [x] Discount badge terlihat
+- [x] Link ke vehicle yang dipromo berfungsi
+- [x] Empty state jika tidak ada promo
 
 **Log:**
-- (diisi saat selesai)
+- Created `promo-banner.tsx` - Banner card with image, title, discount badge, related vehicles
+- Created `promo/page.tsx` - SSR page fetching active promos from Strapi
+- Build OK, all verifications passed
 
 **Issues:**
-- (diisi saat ada masalah)
+- None
 
 **Notes:**
-- (diisi untuk sesi berikutnya)
+- Promo page shows as Static (pre-rendered), will revalidate on deploy
+- Banner image uses large format if available, fallback to original URL
+- Related vehicles shown as clickable chips with availability dot
 
 ---
 
