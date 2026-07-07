@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "promos",
+  "info": {
+    "singularName": "promo",
+    "pluralName": "promos",
+    "displayName": "Promo",
+    "description": "Promo E-Catalog"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "discount": {
+      "type": "integer",
+      "required": true,
+      "min": 0,
+      "max": 100
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    },
+    "banner": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "vehicles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::vehicle.vehicle",
+      "mappedBy": "promo"
+    }
+  }
+}

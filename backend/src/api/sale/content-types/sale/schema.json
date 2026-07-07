@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sales",
+  "info": {
+    "singularName": "sale",
+    "pluralName": "sales",
+    "displayName": "Sale",
+    "description": "Data Penjualan"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "saleDate": {
+      "type": "date",
+      "required": true
+    },
+    "salePrice": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+    },
+    "buyerName": {
+      "type": "string"
+    },
+    "vehicle": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::vehicle.vehicle",
+      "inversedBy": "sales"
+    }
+  }
+}
