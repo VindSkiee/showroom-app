@@ -68,7 +68,7 @@
       "enum": ["none", "minor", "major"],
       "default": "none"
     },
-    "status": {
+    "availabilityStatus": {
       "type": "enumeration",
       "enum": ["available", "sold_out"],
       "default": "available"

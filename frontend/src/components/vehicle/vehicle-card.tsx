@@ -65,7 +65,7 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
             <h3 className="text-base font-semibold leading-tight text-ink line-clamp-1">
               {vehicle.name}
             </h3>
-            <StatusBadge status={vehicle.status} />
+            <StatusBadge status={vehicle.availabilityStatus} />
           </div>
 
           <p className="text-sm text-ink-muted line-clamp-1">{vehicle.model}</p>

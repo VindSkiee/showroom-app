@@ -101,7 +101,7 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
             <TypeBadge type={vehicle.type} />
           </div>
           <div className="absolute right-3 top-3">
-            <StatusBadge status={vehicle.status} />
+            <StatusBadge status={vehicle.availabilityStatus} />
           </div>
         </div>
 
@@ -151,7 +151,7 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
             accent={vehicle.taxStatus === "active"}
           />
           <InfoRow label="Kondisi" value={defectStatusLabel(vehicle.defectStatus)} />
-          <InfoRow label="Status" value={vehicle.status === "available" ? "Tersedia" : "Terjual"} />
+          <InfoRow label="Status" value={vehicle.availabilityStatus === "available" ? "Tersedia" : "Terjual"} />
         </div>
 
         {/* Document note */}
@@ -200,7 +200,7 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
       </div>
 
       {/* WhatsApp CTA */}
-      {vehicle.status === "available" && (
+      {vehicle.availabilityStatus === "available" && (
         <WhatsAppButton vehicleName={vehicle.name} price={vehicle.price} />
       )}
     </>

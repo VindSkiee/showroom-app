@@ -528,6 +528,10 @@ export interface ApiVehicleVehicle extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    availabilityStatus: Schema.Attribute.Enumeration<
+      ['available', 'sold_out']
+    > &
+      Schema.Attribute.DefaultTo<'available'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -558,8 +562,6 @@ export interface ApiVehicleVehicle extends Struct.CollectionTypeSchema {
     promo: Schema.Attribute.Relation<'manyToOne', 'api::promo.promo'>;
     publishedAt: Schema.Attribute.DateTime;
     sales: Schema.Attribute.Relation<'oneToMany', 'api::sale.sale'>;
-    status: Schema.Attribute.Enumeration<['available', 'sold_out']> &
-      Schema.Attribute.DefaultTo<'available'>;
     taxExpiredFrom: Schema.Attribute.Integer &
       Schema.Attribute.SetMinMax<
         {

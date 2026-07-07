@@ -24,8 +24,8 @@
 | Metric | Value |
 |--------|-------|
 | Total Sessions | 10 |
-| Done | 7/10 |
-| Current | S8 |
+| Done | 8/10 |
+| Current | S9 |
 | Last Updated | 2026-07-07 |
 
 ---
@@ -401,7 +401,7 @@ S0 (Foundation)
 
 ## S8: Seed Data & Testing
 
-**Status:** ⬜
+**Status:** ✅
 **Goal:** Data test lengkap + manual QA
 
 **Files:** Tidak ada file baru
@@ -417,13 +417,24 @@ S0 (Foundation)
 - [ ] Desktop test (1024px+)
 
 **Log:**
-- (diisi saat selesai)
+- Fixed Strapi API routes: converted .js → .ts (Strapi v5 requires TypeScript)
+- Fixed Strapi content type: renamed `status` → `availabilityStatus` (Strapi v5 reserves `status` for draft/publish)
+- Updated frontend types and components to use `availabilityStatus`
+- Enabled public API permissions for vehicle and promo (find, findOne)
+- Seeded 10 vehicles: Honda Vario, NMAX, PCX, Aerox, Beat Street, W175, CRF150L, Scoopy, Satria F150, CB150R
+- Seeded 2 promos: Promo Akhir Tahun (10%), Flash Sale Matic (5%)
+- Linked 4 vehicles to promos
+- All vehicles published and API verified working
+- `npm run build` frontend OK tanpa error
 
 **Issues:**
-- (diisi saat ada masalah)
+- esbuild platform mismatch (Windows vs WSL) - resolved by reinstalling node_modules
+- Strapi routes not registered - resolved by converting .js to .ts files
+- `status` field reserved in Strapi v5 - renamed to `availabilityStatus`
 
 **Notes:**
-- (diisi untuk sesi berikutnya)
+- Seed data requires Strapi running on Windows (WSL can't access Strapi dev server)
+- All vehicles use `availabilityStatus` field instead of `status`
 
 ---
 

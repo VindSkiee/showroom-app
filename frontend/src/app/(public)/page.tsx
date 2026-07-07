@@ -23,7 +23,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
     const res = await getVehicles({
       name: params.q || undefined,
       type: (params.type as VehicleType) || undefined,
-      status: (params.status as VehicleStatus) || undefined,
+      availabilityStatus: (params.status as VehicleStatus) || undefined,
       sort: params.sort || "createdAt:desc",
       pageSize: 20,
     });

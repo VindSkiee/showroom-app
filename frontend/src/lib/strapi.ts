@@ -65,7 +65,7 @@ function buildVehicleParams(filters?: VehicleFilters): string {
 
   // Filters
   if (filters.type) params.set("filters[type][$eq]", filters.type);
-  if (filters.status) params.set("filters[status][$eq]", filters.status);
+  if (filters.availabilityStatus) params.set("filters[availabilityStatus][$eq]", filters.availabilityStatus);
   if (filters.documentStatus)
     params.set("filters[documentStatus][$eq]", filters.documentStatus);
   if (filters.taxStatus)

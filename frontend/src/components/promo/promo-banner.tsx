@@ -70,7 +70,7 @@ export function PromoBanner({ promo }: PromoBannerProps) {
                   className="inline-flex items-center gap-1.5 rounded-lg bg-bg px-3 py-1.5 text-sm text-ink transition-colors hover:bg-stone-200"
                 >
                   <span className="line-clamp-1">{vehicle.name}</span>
-                  {vehicle.status === "available" && (
+                  {vehicle.availabilityStatus === "available" && (
                     <span className="h-1.5 w-1.5 rounded-full bg-accent" />
                   )}
                 </Link>

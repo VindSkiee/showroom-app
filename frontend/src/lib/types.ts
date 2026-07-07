@@ -93,7 +93,7 @@ export interface Vehicle {
   taxExpiryYear: number | null;
   taxExpiredFrom: number | null;
   defectStatus: DefectStatus;
-  status: VehicleStatus;
+  availabilityStatus: VehicleStatus;
   defects: DefectItem[];
   images: StrapiMedia[];
   video: StrapiMedia | null;
@@ -130,7 +130,7 @@ export interface Sale {
 
 export interface VehicleFilters {
   type?: VehicleType;
-  status?: VehicleStatus;
+  availabilityStatus?: VehicleStatus;
   documentStatus?: DocumentStatus;
   taxStatus?: TaxStatus;
   defectStatus?: DefectStatus;
