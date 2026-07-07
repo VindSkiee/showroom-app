@@ -327,4 +327,42 @@ See `docs/DESIGN.md` for full design system.
 - **Backend:** Railway + PostgreSQL addon
 - **Environment:** Production + Preview
 
+### Environment Variables
+
+**Frontend (Vercel):**
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_STRAPI_URL` | Strapi backend URL | `https://your-app.up.railway.app` |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | WhatsApp number (628...) | `6281234567890` |
+| `NEXT_PUBLIC_SITE_URL` | Vercel app URL | `https://your-app.vercel.app` |
+
+**Backend (Railway):**
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `FRONTEND_URL` | Vercel app URL for CORS | `https://your-app.vercel.app` |
+| `DATABASE_CLIENT` | `postgresql` | `postgresql` |
+| `DATABASE_HOST` | Railway DB host | `ballast.proxy.rlwy.net` |
+| `DATABASE_PORT` | Railway DB port | `5432` |
+| `DATABASE_NAME` | DB name | `railway` |
+| `DATABASE_USERNAME` | DB user | `postgres` |
+| `DATABASE_PASSWORD` | DB password | `xxxx` |
+| `DATABASE_SSL` | Enable SSL | `true` |
+
+### Deploy Steps
+
+**Backend (Railway):**
+1. Push repo to GitHub
+2. Create new project di Railway → Deploy from GitHub
+3. Add PostgreSQL addon
+4. Set environment variables di Railway dashboard
+5. Strapi will auto-build and migrate DB
+
+**Frontend (Vercel):**
+1. Import repo di Vercel
+2. Set framework: Next.js, root directory: `frontend`
+3. Set environment variables (copy dari `.env.example`)
+4. Deploy → auto-deploy on push to main
+
 See `.opencode/skills/deploy.md` for full guide.

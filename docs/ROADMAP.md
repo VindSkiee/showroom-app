@@ -24,8 +24,8 @@
 | Metric | Value |
 |--------|-------|
 | Total Sessions | 10 |
-| Done | 8/10 |
-| Current | S9 |
+| Done | 9/10 |
+| Current | S10 |
 | Last Updated | 2026-07-07 |
 
 ---
@@ -448,7 +448,7 @@ S0 (Foundation)
 
 ## S9: Deploy Prep
 
-**Status:** ⬜
+**Status:** ✅
 **Goal:** Siap deploy ke Vercel + Railway
 
 **Files:**
@@ -460,16 +460,21 @@ S0 (Foundation)
 | Edit | `AGENTS.md` | Update deployment instructions |
 
 **Verification:**
-- [ ] `npm run build` production OK
-- [ ] Environment variables lengkap
-- [ ] CORS configured untuk production URL
+- [x] `npm run build` production OK
+- [x] Environment variables lengkap
+- [x] CORS configured untuk production URL
 - [ ] Strapi accessible dari luar (Railway)
 
 **Log:**
-- (diisi saat selesai)
+- Created `frontend/.env.example` - Production env template (Strapi URL, WhatsApp, Site URL)
+- Updated `backend/config/middlewares.ts` - CORS uses FRONTEND_URL env var for production
+- Updated `AGENTS.md` - Added full deployment instructions with env vars table and deploy steps
+- `npm run build` frontend OK tanpa error
 
 **Issues:**
-- (diisi saat ada masalah)
+- None
 
 **Notes:**
-- (diisi untuk sesi berikutnya)
+- CORS origin uses FRONTEND_URL env var (set in Railway dashboard)
+- Frontend env vars: NEXT_PUBLIC_STRAPI_URL, NEXT_PUBLIC_WHATSAPP_NUMBER, NEXT_PUBLIC_SITE_URL
+- Backend env vars: FRONTEND_URL (for CORS), DATABASE_* (for PostgreSQL)

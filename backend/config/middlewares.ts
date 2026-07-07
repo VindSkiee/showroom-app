@@ -1,5 +1,7 @@
 import type { Core } from '@strapi/strapi';
 
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+
 const config: Core.Config.Middlewares = [
   'strapi::logger',
   'strapi::errors',
@@ -10,7 +12,7 @@ const config: Core.Config.Middlewares = [
       origin: [
         'http://localhost:3000',
         'http://localhost:3001',
-        'https://your-app.vercel.app',
+        frontendUrl,
       ],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
       headers: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
