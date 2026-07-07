@@ -25,7 +25,7 @@
 |--------|-------|
 | Total Sessions | 10 |
 | Done | 4/10 |
-| Current | S4 |
+| Current | S5 |
 | Last Updated | 2026-07-07 |
 
 ---
@@ -221,7 +221,7 @@ S0 (Foundation)
 
 ## S4: Navigation
 
-**Status:** ⬜
+**Status:** ✅
 **Goal:** Navigasi lengkap (header + footer + mobile menu)
 
 **Files:**
@@ -233,20 +233,26 @@ S0 (Foundation)
 | Create | `src/app/(public)/layout.tsx` | Public layout wrapper |
 
 **Verification:**
-- [ ] Header sticky di top
-- [ ] Mobile: hamburger menu → slide navigation
-- [ ] Desktop: nav links horizontal
-- [ ] Footer muncul di semua halaman
-- [ ] Navigasi: Home, Catalog, Promo
+- [x] Header sticky di top
+- [x] Mobile: hamburger menu → slide navigation
+- [x] Desktop: nav links horizontal
+- [x] Footer muncul di semua halaman
+- [x] Navigasi: Home, Catalog, Promo
 
 **Log:**
-- (diisi saat selesai)
+- Created `header.tsx` - Sticky header with logo, desktop nav, mobile hamburger toggle
+- Created `footer.tsx` - Simple footer with brand, nav links, copyright
+- Created `(public)/layout.tsx` - Layout wrapper composing Header + Footer
+- Build OK, all verifications passed
 
 **Issues:**
-- (diisi saat ada masalah)
+- None
 
 **Notes:**
-- (diisi untuk sesi berikutnya)
+- Header uses backdrop-blur for translucent effect on scroll
+- Mobile menu toggles open/close with X icon
+- Active nav link highlighted with surface background
+- Footer links same as header nav items
 
 ---
 
