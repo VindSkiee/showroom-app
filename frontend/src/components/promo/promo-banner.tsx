@@ -66,7 +66,7 @@ export function PromoBanner({ promo }: PromoBannerProps) {
               {promo.vehicles.map((vehicle) => (
                 <Link
                   key={vehicle.id}
-                  href={`/vehicle/${vehicle.id}`}
+                  href={`/vehicle/${vehicle.documentId}`}
                   className="inline-flex items-center gap-1.5 rounded-lg bg-bg px-3 py-1.5 text-sm text-ink transition-colors hover:bg-stone-200"
                 >
                   <span className="line-clamp-1">{vehicle.name}</span>

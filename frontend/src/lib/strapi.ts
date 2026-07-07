@@ -36,9 +36,9 @@ export async function getVehicles(
 }
 
 export async function getVehicle(
-  id: number
+  documentId: string
 ): Promise<StrapiSingleResponse<Vehicle>> {
-  return fetchStrapi<StrapiSingleResponse<Vehicle>>(`/vehicles/${id}`);
+  return fetchStrapi<StrapiSingleResponse<Vehicle>>(`/vehicles/${documentId}?populate=*`);
 }
 
 // ============================================

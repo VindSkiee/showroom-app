@@ -5,13 +5,13 @@ import { PageContent } from "@/components/motion/page-content";
 import type { Metadata } from "next";
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ documentId: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id } = await params;
+  const { documentId } = await params;
   try {
-    const { data } = await getVehicle(Number(id));
+    const { data } = await getVehicle(documentId);
     return {
       title: `${data.name} - ${data.model}`,
       description: `${data.name} ${data.model} tahun ${data.year} harga ${new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(data.price)}`,
@@ -26,11 +26,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function VehicleDetailPage({ params }: PageProps) {
-  const { id } = await params;
+  const { documentId } = await params;
 
   let vehicle;
   try {
-    const response = await getVehicle(Number(id));
+    const response = await getVehicle(documentId);
     vehicle = response.data;
   } catch {
     notFound();

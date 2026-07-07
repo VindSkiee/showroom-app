@@ -81,6 +81,7 @@ export type DefectStatus = "none" | "minor" | "major";
 
 export interface Vehicle {
   id: number;
+  documentId: string;
   name: string;
   model: string;
   licensePlate: string;

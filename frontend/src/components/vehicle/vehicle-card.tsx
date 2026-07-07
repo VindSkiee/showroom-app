@@ -33,7 +33,7 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
       }}
     >
       <Link
-        href={`/vehicle/${vehicle.id}`}
+        href={`/vehicle/${vehicle.documentId}`}
         className="group flex flex-col overflow-hidden rounded-2xl bg-surface"
       >
         {/* Image */}
