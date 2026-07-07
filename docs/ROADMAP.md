@@ -24,8 +24,8 @@
 | Metric | Value |
 |--------|-------|
 | Total Sessions | 10 |
-| Done | 2/10 |
-| Current | S2 |
+| Done | 3/10 |
+| Current | S3 |
 | Last Updated | 2026-07-07 |
 
 ---
@@ -139,7 +139,7 @@ S0 (Foundation)
 
 ## S2: Detail Page
 
-**Status:** ⬜
+**Status:** ✅
 **Goal:** Halaman detail motor + WhatsApp button
 
 **Files:**
@@ -152,20 +152,27 @@ S0 (Foundation)
 | Edit | `src/app/(public)/vehicle/[id]/page.tsx` | Detail page SSR |
 
 **Verification:**
-- [ ] Klik card → pindah ke detail page
-- [ ] Info motor lengkap (nama, harga, surat, pajak, cacat)
-- [ ] WhatsApp button muncul di bottom
-- [ ] Link WhatsApp benar (wa.me/{number}?text=...)
-- [ ] SEO metadata berfungsi
+- [x] Klik card → pindah ke detail page
+- [x] Info motor lengkap (nama, harga, surat, pajak, cacat)
+- [x] WhatsApp button muncul di bottom
+- [x] Link WhatsApp benar (wa.me/{number}?text=...)
+- [x] SEO metadata berfungsi
 
 **Log:**
-- (diisi saat selesai)
+- Created `whatsapp-button.tsx` - Fixed bottom CTA with WhatsApp icon + pre-filled message
+- Created `vehicle-detail.tsx` - Full detail view with image gallery, info grid, defects, promo
+- Created `vehicle-detail-skeleton.tsx` - Loading skeleton for detail page
+- Created `vehicle/[id]/page.tsx` - SSR page with generateMetadata for SEO
+- Build OK, all verifications passed
 
 **Issues:**
-- (diisi saat ada masalah)
+- None
 
 **Notes:**
-- (diisi untuk sesi berikutnya)
+- WhatsApp message includes vehicle name + formatted price
+- Detail shows: year, plate, document status, tax status, defect status
+- Defects shown with part name + description + images
+- Promo badge shown if vehicle has active promo
 
 ---
 
