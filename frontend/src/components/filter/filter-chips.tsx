@@ -66,8 +66,8 @@ export function FilterChips() {
   );
 
   return (
-    <div className="w-fit rounded-xl bg-surface/50 px-4 py-2.5 sm:px-5">
-      <div className="flex flex-wrap gap-2 sm:gap-3">
+    <div className="w-fit rounded-xl bg-surface/50 px-3 py-2 sm:px-5 sm:py-2.5">
+      <div className="flex gap-2 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-none sm:flex-wrap sm:overflow-visible">
         {TYPE_OPTIONS.map((option) => {
           const isActive = currentValue === option.value;
           const isPromo = option.value === "promo";
@@ -80,16 +80,20 @@ export function FilterChips() {
                 disabled={isPending}
                 aria-pressed={isActive}
                 className={cn(
-                  "relative overflow-hidden whitespace-nowrap rounded-lg px-4 py-1.5 text-xs font-bold transition-all duration-300 ease-out sm:rounded-xl sm:px-5 sm:py-2 sm:text-sm",
+                  "group relative overflow-hidden whitespace-nowrap rounded-xl px-5 py-2 text-sm font-bold snap-start transition-all duration-300 ease-out",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger focus-visible:ring-offset-2",
-                  "disabled:opacity-50 disabled:cursor-not-allowed",
+                  "disabled:opacity-50 disabled:cursor-not-allowed active:scale-95",
                   isActive
-                    ? "bg-danger text-white shadow-md"
-                    : "animate-shimmer border border-danger/30 text-danger hover:bg-danger/10 hover:border-danger/50 hover:shadow-sm hover:scale-[1.02]",
+                    ? "bg-danger text-white shadow-[0_4px_15px_-3px_rgba(225,29,72,0.4)]"
+                    : "border border-danger/30 text-danger hover:bg-danger/10 hover:border-danger/50",
+                  !isActive &&
+                    "after:absolute after:inset-0 after:animate-glare after:bg-gradient-to-r after:from-transparent after:via-danger/20 after:to-transparent",
                 )}
               >
-                <span className="flex items-center gap-1.5">
-                  <FireIcon />
+                <span className="relative z-10 flex items-center gap-1.5">
+                  <span className="inline-block transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-12">
+                    <FireIcon />
+                  </span>
                   {option.label}
                 </span>
               </button>
@@ -103,9 +107,9 @@ export function FilterChips() {
               disabled={isPending}
               aria-pressed={isActive}
               className={cn(
-                "whitespace-nowrap rounded-lg px-4 py-1.5 text-xs font-medium transition-all duration-300 ease-out sm:rounded-xl sm:px-5 sm:py-2 sm:text-sm",
+                "whitespace-nowrap rounded-xl px-5 py-2 text-sm font-medium snap-start transition-all duration-300 ease-out",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
-                "disabled:opacity-50 disabled:cursor-not-allowed",
+                "disabled:opacity-50 disabled:cursor-not-allowed active:scale-95",
                 isActive
                   ? "bg-accent text-white shadow-[0_2px_10px_-2px_rgba(0,0,0,0.1)]"
                   : "bg-white text-ink-muted hover:bg-stone-50 hover:text-ink hover:shadow-sm border border-stone-100",

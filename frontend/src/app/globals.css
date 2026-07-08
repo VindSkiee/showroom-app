@@ -83,23 +83,16 @@ html {
   color: white;
 }
 
-/* Shimmer animation for promo chip */
-@keyframes shimmer {
+/* Glare animation for promo chip */
+@keyframes glare {
   0% {
-    background-position: -200% 0;
+    transform: translateX(-100%) skewX(-15deg);
   }
-  100% {
-    background-position: 200% 0;
+  20%, 100% {
+    transform: translateX(200%) skewX(-15deg);
   }
 }
 
-.animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(239, 68, 68, 0.1) 0%,
-    rgba(239, 68, 68, 0.25) 50%,
-    rgba(239, 68, 68, 0.1) 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2.5s ease-in-out infinite;
+.animate-glare {
+  animation: glare 4s ease-out infinite;
 }

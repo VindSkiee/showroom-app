@@ -1,15 +1,10 @@
-import Link from "next/link";
 import { Container } from "@/components/ui/container";
-
-const footerLinks = [
-  { href: "/", label: "Katalog" },
-];
 
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-surface bg-bg">
       <Container>
-        <div className="flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="py-8">
           {/* Brand */}
           <div>
             <p className="text-sm font-semibold text-ink">Showroom Motor</p>
@@ -17,19 +12,6 @@ export function Footer() {
               Motor bekas berkualitas, surat lengkap
             </p>
           </div>
-
-          {/* Links */}
-          <nav className="flex gap-4">
-            {footerLinks.map((link) => (
-              <Link
-                key={link.href + link.label}
-                href={link.href}
-                className="text-sm text-ink-muted transition-colors hover:text-ink"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
         </div>
 
         {/* Copyright */}
