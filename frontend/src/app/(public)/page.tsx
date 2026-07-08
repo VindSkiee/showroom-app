@@ -82,7 +82,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         {/* Result count */}
         {vehicles.length > 0 && (
           <p className="mb-4 text-sm text-ink-muted">
-            {totalCount} motor ditemukan
+            Menampilkan {totalCount} item{totalCount > 1 ? "s" : ""} {params.q && `untuk "${params.q}"`}
           </p>
         )}
 
