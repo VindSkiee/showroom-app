@@ -28,36 +28,48 @@ export function FilterChips() {
 
   const handleFilter = useCallback(
     (type: string) => {
+      if (type === currentType) return;
+
       const params = new URLSearchParams(searchParams.toString());
       if (type === "all") {
         params.delete("type");
       } else {
         params.set("type", type);
       }
+
       startTransition(() => {
         router.push(`?${params.toString()}`, { scroll: false });
       });
     },
-    [router, searchParams, startTransition]
+    [router, searchParams, currentType],
   );
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-      {TYPE_OPTIONS.map((option) => (
-        <button
-          key={option.value}
-          onClick={() => handleFilter(option.value)}
-          disabled={isPending}
-          className={cn(
-            "whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors",
-            currentType === option.value
-              ? "bg-accent text-white"
-              : "bg-surface text-ink hover:bg-stone-200"
-          )}
-        >
-          {option.label}
-        </button>
-      ))}
+    <div className="w-fit rounded-xl bg-surface/50 px-4 py-2.5 sm:px-5">
+      <div className="flex flex-wrap gap-2 sm:gap-3">
+        {TYPE_OPTIONS.map((option) => {
+          const isActive = currentType === option.value;
+
+          return (
+            <button
+              key={option.value}
+              onClick={() => handleFilter(option.value)}
+              disabled={isPending}
+              aria-pressed={isActive}
+              className={cn(
+                "whitespace-nowrap rounded-lg px-4 py-1.5 text-xs font-medium transition-all duration-300 ease-out sm:rounded-xl sm:px-5 sm:py-2 sm:text-sm",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
+                "disabled:opacity-50 disabled:cursor-not-allowed",
+                isActive
+                  ? "bg-accent text-white shadow-[0_2px_10px_-2px_rgba(0,0,0,0.1)]"
+                  : "bg-white text-ink-muted hover:bg-stone-50 hover:text-ink hover:shadow-sm border border-stone-100",
+              )}
+            >
+              {option.label}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

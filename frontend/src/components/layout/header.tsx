@@ -12,7 +12,6 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: "/", label: "Beranda" },
   { href: "/", label: "Katalog" },
   { href: "/promo", label: "Promo" },
 ];
@@ -42,7 +41,7 @@ export function Header() {
                   key={item.href + item.label}
                   href={item.href}
                   className={cn(
-                    "rounded-lg px-4 py-2 text-sm font-medium transition-colors",
+                    "rounded-lg px-4 py-3 text-sm font-medium transition-colors",
                     isActive
                       ? "bg-surface text-ink"
                       : "text-ink-muted hover:bg-surface hover:text-ink"

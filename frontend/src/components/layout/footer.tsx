@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Container } from "@/components/ui/container";
 
 const footerLinks = [
-  { href: "/", label: "Beranda" },
   { href: "/", label: "Katalog" },
   { href: "/promo", label: "Promo" },
 ];

@@ -61,6 +61,9 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
 
         {/* Type Filter Chips */}
         <div className="mb-6">
+          <p className="mb-2 text-xs font-medium text-ink-muted uppercase tracking-wide">
+            Kategori
+          </p>
           <Suspense>
             <FilterChips />
           </Suspense>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { motionTokens, slideUpVariants } from "@/lib/motion-tokens";
@@ -44,6 +44,17 @@ export function FilterSheet() {
 
   const [localStatus, setLocalStatus] = useState(currentStatus);
   const [localSort, setLocalSort] = useState(currentSort);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   const handleOpen = useCallback(() => {
     setLocalStatus(currentStatus);
@@ -99,7 +110,7 @@ export function FilterSheet() {
       {/* Backdrop + Sheet */}
       <AnimatePresence>
         {isOpen && (
-          <div className="fixed inset-0 z-50">
+          <div className="fixed inset-0 z-50 overflow-hidden">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -116,78 +127,96 @@ export function FilterSheet() {
               animate="visible"
               exit="exit"
               variants={prefersReduced ? undefined : slideUpVariants}
-              className="absolute inset-x-0 bottom-0 rounded-t-2xl bg-white p-6 pb-8"
+              className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col rounded-t-2xl bg-white overflow-hidden"
             >
-              {/* Handle */}
-              <div className="mb-6 flex justify-center">
-                <div className="h-1 w-10 rounded-full bg-stone-300" />
+              {/* Handle + Header (fixed top) */}
+              <div className="shrink-0 px-4 pt-5 sm:px-6 sm:pt-6">
+                <div className="mb-4 flex justify-center">
+                  <div className="h-1 w-10 rounded-full bg-stone-300" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-bold text-ink">
+                    Filter & Urutkan
+                  </h2>
+                  <button onClick={handleReset} className="text-sm text-accent">
+                    Reset
+                  </button>
+                </div>
               </div>
 
-              {/* Header */}
-              <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-lg font-bold text-ink">Filter & Urutkan</h2>
+              {/* Scrollable content */}
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-5 sm:px-6 sm:py-6">
+                {/* Status */}
+                <div className="mb-6">
+                  <h3 className="mb-3 text-sm font-medium text-ink-muted">
+                    Status
+                  </h3>
+                  <div className="w-fit rounded-xl bg-surface/50 px-3 py-2 sm:px-5 sm:py-2.5">
+                    <div className="flex flex-wrap gap-2 sm:gap-3">
+                      {STATUS_OPTIONS.map((option) => {
+                        const isActive = localStatus === option.value;
+                        return (
+                          <button
+                            key={option.value}
+                            onClick={() => setLocalStatus(option.value)}
+                            aria-pressed={isActive}
+                            className={cn(
+                              "whitespace-nowrap rounded-lg px-4 py-1.5 text-xs font-medium transition-all duration-300 ease-out sm:rounded-xl sm:px-5 sm:py-2 sm:text-sm",
+                              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
+                              isActive
+                                ? "bg-accent text-white font-semibold shadow-md"
+                                : "border border-stone-100 bg-white text-ink-muted hover:border-stone-200 hover:bg-stone-50 hover:text-ink hover:shadow-sm"
+                            )}
+                          >
+                            {option.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sort */}
+                <div>
+                  <h3 className="mb-3 text-sm font-medium text-ink-muted">
+                    Urutkan
+                  </h3>
+                  <div className="w-fit rounded-xl bg-surface/50 px-3 py-2 sm:px-5 sm:py-2.5">
+                    <div className="flex flex-wrap gap-2 sm:gap-3">
+                      {SORT_OPTIONS.map((option) => {
+                        const isActive = localSort === option.value;
+                        return (
+                          <button
+                            key={option.value}
+                            onClick={() => setLocalSort(option.value)}
+                            aria-pressed={isActive}
+                            className={cn(
+                              "whitespace-nowrap rounded-lg px-4 py-1.5 text-xs font-medium transition-all duration-300 ease-out sm:rounded-xl sm:px-5 sm:py-2 sm:text-sm",
+                              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
+                              isActive
+                                ? "bg-accent text-white font-semibold shadow-md"
+                                : "border border-stone-100 bg-white text-ink-muted hover:border-stone-200 hover:bg-stone-50 hover:text-ink hover:shadow-sm"
+                            )}
+                          >
+                            {option.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Apply button (always visible) */}
+              <div className="shrink-0 border-t border-stone-100 px-4 py-3 sm:px-6 sm:py-4">
                 <button
-                  onClick={handleReset}
-                  className="text-sm text-accent"
+                  onClick={handleApply}
+                  disabled={isPending}
+                  className="w-full rounded-xl bg-accent py-3 text-base font-medium text-white hover:bg-accent-hover transition-colors duration-200"
                 >
-                  Reset
+                  {isPending ? "Menerapkan..." : "Terapkan Filter"}
                 </button>
               </div>
-
-              {/* Status */}
-              <div className="mb-6">
-                <h3 className="mb-3 text-sm font-medium text-ink-muted">
-                  Status
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {STATUS_OPTIONS.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => setLocalStatus(option.value)}
-                      className={cn(
-                        "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                        localStatus === option.value
-                          ? "bg-accent text-white"
-                          : "bg-surface text-ink hover:bg-stone-200"
-                      )}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Sort */}
-              <div className="mb-8">
-                <h3 className="mb-3 text-sm font-medium text-ink-muted">
-                  Urutkan
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {SORT_OPTIONS.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => setLocalSort(option.value)}
-                      className={cn(
-                        "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                        localSort === option.value
-                          ? "bg-accent text-white"
-                          : "bg-surface text-ink hover:bg-stone-200"
-                      )}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Apply */}
-              <button
-                onClick={handleApply}
-                disabled={isPending}
-                className="w-full rounded-xl bg-accent py-3 text-base font-medium text-white hover:bg-accent-hover"
-              >
-                {isPending ? "Menerapkan..." : "Terapkan Filter"}
-              </button>
             </motion.div>
           </div>
         )}
