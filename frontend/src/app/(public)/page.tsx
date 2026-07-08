@@ -20,10 +20,13 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   let totalCount = 0;
 
   try {
+    const hasPromo = params.promo === "true";
+
     const res = await getVehicles({
       name: params.q || undefined,
       type: (params.type as VehicleType) || undefined,
       availabilityStatus: (params.status as VehicleStatus) || undefined,
+      hasPromo: hasPromo || undefined,
       sort: params.sort || "createdAt:desc",
       pageSize: 20,
     });
@@ -32,6 +35,13 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   } catch {
     // Strapi not reachable - show empty state
   }
+
+  // Sort: promo vehicles first
+  vehicles = [...vehicles].sort((a, b) => {
+    if (a.promo?.isActive && !b.promo?.isActive) return -1;
+    if (!a.promo?.isActive && b.promo?.isActive) return 1;
+    return 0;
+  });
 
   return (
     <PageContent>

@@ -14,6 +14,10 @@ interface VehicleCardProps {
   vehicle: Vehicle;
 }
 
+function calculatePromoPrice(price: number, discount: number): number {
+  return Math.round(price - (price * discount / 100));
+}
+
 export function VehicleCard({ vehicle }: VehicleCardProps) {
   const prefersReduced = useReducedMotion();
   const [imgError, setImgError] = useState(false);
@@ -22,6 +26,11 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
     vehicle.images && vehicle.images.length > 0 && !imgError
       ? getStrapiImageUrl(vehicle.images[0].formats?.small?.url || vehicle.images[0].url)
       : null;
+
+  const hasActivePromo = vehicle.promo?.isActive;
+  const promoPrice = hasActivePromo
+    ? calculatePromoPrice(vehicle.price, vehicle.promo!.discount)
+    : null;
 
   return (
     <motion.div
@@ -56,6 +65,11 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
           {/* Badges overlay */}
           <div className="absolute left-3 top-3 flex gap-2">
             <TypeBadge type={vehicle.type} />
+            {hasActivePromo && (
+              <span className="rounded-lg bg-danger px-2 py-1 text-xs font-bold text-white">
+                -{vehicle.promo!.discount}%
+              </span>
+            )}
           </div>
         </div>
 
@@ -71,9 +85,22 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
           <p className="text-sm text-ink-muted line-clamp-1">{vehicle.model}</p>
 
           <div className="mt-auto flex items-end justify-between">
-            <p className="text-lg font-bold text-accent">
-              {formatCurrency(vehicle.price)}
-            </p>
+            <div>
+              {hasActivePromo && promoPrice !== null ? (
+                <>
+                  <p className="text-sm text-ink-muted line-through">
+                    {formatCurrency(vehicle.price)}
+                  </p>
+                  <p className="text-lg font-bold text-accent">
+                    {formatCurrency(promoPrice)}
+                  </p>
+                </>
+              ) : (
+                <p className="text-lg font-bold text-accent">
+                  {formatCurrency(vehicle.price)}
+                </p>
+              )}
+            </div>
             <p className="text-xs text-ink-muted">{vehicle.year}</p>
           </div>
         </div>

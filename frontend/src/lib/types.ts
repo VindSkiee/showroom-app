@@ -135,6 +135,7 @@ export interface VehicleFilters {
   documentStatus?: DocumentStatus;
   taxStatus?: TaxStatus;
   defectStatus?: DefectStatus;
+  hasPromo?: boolean;
   name?: string;
   priceMin?: number;
   priceMax?: number;

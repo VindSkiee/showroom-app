@@ -127,9 +127,27 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
 
         {/* Header */}
         <div className="mt-6">
-          <h1 className="text-2xl font-bold text-ink">{vehicle.name}</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold text-ink">{vehicle.name}</h1>
+            {vehicle.promo?.isActive && (
+              <span className="rounded-lg bg-danger px-2 py-1 text-xs font-bold text-white">
+                -{vehicle.promo.discount}%
+              </span>
+            )}
+          </div>
           <p className="mt-1 text-base text-ink-muted">{vehicle.model}</p>
-          <p className="mt-3 text-3xl font-bold text-accent">{formatCurrency(vehicle.price)}</p>
+          {vehicle.promo?.isActive ? (
+            <div className="mt-3">
+              <p className="text-lg text-ink-muted line-through">
+                {formatCurrency(vehicle.price)}
+              </p>
+              <p className="text-3xl font-bold text-accent">
+                {formatCurrency(Math.round(vehicle.price - (vehicle.price * vehicle.promo.discount / 100)))}
+              </p>
+            </div>
+          ) : (
+            <p className="mt-3 text-3xl font-bold text-accent">{formatCurrency(vehicle.price)}</p>
+          )}
         </div>
 
         <div className="my-6 h-px bg-stone-200" />
@@ -201,7 +219,12 @@ export function VehicleDetail({ vehicle }: VehicleDetailProps) {
 
       {/* WhatsApp CTA */}
       {vehicle.availabilityStatus === "available" && (
-        <WhatsAppButton vehicleName={vehicle.name} price={vehicle.price} />
+        <WhatsAppButton
+          vehicleName={vehicle.name}
+          price={vehicle.promo?.isActive
+            ? Math.round(vehicle.price - (vehicle.price * vehicle.promo.discount / 100))
+            : vehicle.price}
+        />
       )}
     </>
   );

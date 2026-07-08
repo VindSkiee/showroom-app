@@ -73,6 +73,7 @@ function buildVehicleParams(filters?: VehicleFilters): string {
   if (filters.defectStatus)
     params.set("filters[defectStatus][$eq]", filters.defectStatus);
   if (filters.name) params.set("filters[name][$containsi]", filters.name);
+  if (filters.hasPromo) params.set("filters[promo][$notNull]", "true");
   if (filters.priceMin)
     params.set("filters[price][$gte]", String(filters.priceMin));
   if (filters.priceMax)

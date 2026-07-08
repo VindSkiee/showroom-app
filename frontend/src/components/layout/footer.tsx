@@ -3,7 +3,6 @@ import { Container } from "@/components/ui/container";
 
 const footerLinks = [
   { href: "/", label: "Katalog" },
-  { href: "/promo", label: "Promo" },
 ];
 
 export function Footer() {

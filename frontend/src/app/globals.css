@@ -82,3 +82,24 @@ html {
   background-color: var(--color-accent);
   color: white;
 }
+
+/* Shimmer animation for promo chip */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(239, 68, 68, 0.25) 50%,
+    rgba(239, 68, 68, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s ease-in-out infinite;
+}

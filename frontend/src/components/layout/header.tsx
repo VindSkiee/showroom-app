@@ -13,7 +13,6 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { href: "/", label: "Katalog" },
-  { href: "/promo", label: "Promo" },
 ];
 
 export function Header() {
