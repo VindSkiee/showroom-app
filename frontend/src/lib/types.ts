@@ -70,22 +70,21 @@ export interface DefectItem {
 }
 
 // ============================================
-// Content Types
+// Shared Catalog Types
 // ============================================
 
-export type VehicleType = "matic" | "manual" | "sport" | "cruiser" | "scoopy";
 export type VehicleStatus = "available" | "sold_out";
 export type DocumentStatus = "complete" | "incomplete";
 export type TaxStatus = "active" | "expired" | "unknown";
 export type DefectStatus = "none" | "minor" | "major";
 
-export interface Vehicle {
+export interface CatalogItem {
   id: number;
   documentId: string;
   name: string;
   model: string;
   licensePlate: string;
-  type: VehicleType;
+  type: string;
   price: number;
   year: number;
   documentStatus: DocumentStatus;
@@ -95,12 +94,31 @@ export interface Vehicle {
   taxExpiredFrom: number | null;
   defectStatus: DefectStatus;
   availabilityStatus: VehicleStatus;
+  stock: number;
+  stockSold: number;
+  purchasePrice: number | null;
   defects: DefectItem[];
   images: StrapiMedia[];
   video: StrapiMedia | null;
   promo: Promo | null;
   createdAt: string;
   updatedAt: string;
+}
+
+// ============================================
+// Content Types
+// ============================================
+
+export type VehicleType = "matic" | "manual" | "sport" | "cruiser" | "scoopy";
+
+export interface Vehicle extends CatalogItem {
+  type: VehicleType;
+}
+
+export type CarType = "suv" | "sedan" | "mpv" | "hatchback" | "sport" | "lcgc" | "pickup" | "matic" | "manual";
+
+export interface Car extends CatalogItem {
+  type: CarType;
 }
 
 export interface Promo {
@@ -111,16 +129,19 @@ export interface Promo {
   isActive: boolean;
   banner: StrapiMedia | null;
   vehicles: Vehicle[];
+  cars: Car[];
   createdAt: string;
   updatedAt: string;
 }
 
 export interface Sale {
   id: number;
+  documentId: string;
   saleDate: string;
   salePrice: number;
   buyerName: string | null;
-  vehicle: Vehicle;
+  vehicle: Vehicle | null;
+  car: Car | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -131,6 +152,23 @@ export interface Sale {
 
 export interface VehicleFilters {
   type?: VehicleType;
+  availabilityStatus?: VehicleStatus;
+  documentStatus?: DocumentStatus;
+  taxStatus?: TaxStatus;
+  defectStatus?: DefectStatus;
+  hasPromo?: boolean;
+  name?: string;
+  priceMin?: number;
+  priceMax?: number;
+  yearMin?: number;
+  yearMax?: number;
+  sort?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface CarFilters {
+  type?: CarType;
   availabilityStatus?: VehicleStatus;
   documentStatus?: DocumentStatus;
   taxStatus?: TaxStatus;

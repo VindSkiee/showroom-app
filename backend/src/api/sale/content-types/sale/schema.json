@@ -29,6 +29,12 @@
       "relation": "manyToOne",
       "target": "api::vehicle.vehicle",
       "inversedBy": "sales"
+    },
+    "car": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::car.car",
+      "inversedBy": "sales"
     }
   }
 }

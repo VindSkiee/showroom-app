@@ -1,4 +1,4 @@
-import type { StrapiResponse, StrapiSingleResponse, Vehicle, VehicleFilters, Promo } from "./types";
+import type { StrapiResponse, StrapiSingleResponse, Vehicle, VehicleFilters, Car, CarFilters, Promo, Sale } from "./types";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
@@ -42,6 +42,23 @@ export async function getVehicle(
 }
 
 // ============================================
+// Cars
+// ============================================
+
+export async function getCars(
+  filters?: CarFilters
+): Promise<StrapiResponse<Car>> {
+  const params = buildCarParams(filters);
+  return fetchStrapi<StrapiResponse<Car>>(`/cars${params}`);
+}
+
+export async function getCar(
+  documentId: string
+): Promise<StrapiSingleResponse<Car>> {
+  return fetchStrapi<StrapiSingleResponse<Car>>(`/cars/${documentId}?populate=*`);
+}
+
+// ============================================
 // Promos
 // ============================================
 
@@ -49,6 +66,20 @@ export async function getActivePromos(): Promise<StrapiResponse<Promo>> {
   return fetchStrapi<StrapiResponse<Promo>>(
     "/promos?filters[isActive][$eq]=true&populate=*"
   );
+}
+
+// ============================================
+// Sales
+// ============================================
+
+export async function getSales(
+  filters?: { pageSize?: number; sort?: string }
+): Promise<StrapiResponse<Sale>> {
+  const params = new URLSearchParams();
+  params.set("populate", "vehicle,car");
+  if (filters?.pageSize) params.set("pagination[pageSize]", String(filters.pageSize));
+  if (filters?.sort) params.set("sort", filters.sort);
+  return fetchStrapi<StrapiResponse<Sale>>(`/sales?${params.toString()}`);
 }
 
 // ============================================
@@ -60,10 +91,8 @@ function buildVehicleParams(filters?: VehicleFilters): string {
 
   const params = new URLSearchParams();
 
-  // Population
   params.set("populate", "*");
 
-  // Filters
   if (filters.type) params.set("filters[type][$eq]", filters.type);
   if (filters.availabilityStatus) params.set("filters[availabilityStatus][$eq]", filters.availabilityStatus);
   if (filters.documentStatus)
@@ -83,10 +112,43 @@ function buildVehicleParams(filters?: VehicleFilters): string {
   if (filters.yearMax)
     params.set("filters[year][$lte]", String(filters.yearMax));
 
-  // Sort
   if (filters.sort) params.set("sort", filters.sort);
 
-  // Pagination
+  if (filters.page) params.set("pagination[page]", String(filters.page));
+  if (filters.pageSize)
+    params.set("pagination[pageSize]", String(filters.pageSize));
+
+  return `?${params.toString()}`;
+}
+
+function buildCarParams(filters?: CarFilters): string {
+  if (!filters) return "?populate=*";
+
+  const params = new URLSearchParams();
+
+  params.set("populate", "*");
+
+  if (filters.type) params.set("filters[type][$eq]", filters.type);
+  if (filters.availabilityStatus) params.set("filters[availabilityStatus][$eq]", filters.availabilityStatus);
+  if (filters.documentStatus)
+    params.set("filters[documentStatus][$eq]", filters.documentStatus);
+  if (filters.taxStatus)
+    params.set("filters[taxStatus][$eq]", filters.taxStatus);
+  if (filters.defectStatus)
+    params.set("filters[defectStatus][$eq]", filters.defectStatus);
+  if (filters.name) params.set("filters[name][$containsi]", filters.name);
+  if (filters.hasPromo) params.set("filters[promo][$notNull]", "true");
+  if (filters.priceMin)
+    params.set("filters[price][$gte]", String(filters.priceMin));
+  if (filters.priceMax)
+    params.set("filters[price][$lte]", String(filters.priceMax));
+  if (filters.yearMin)
+    params.set("filters[year][$gte]", String(filters.yearMin));
+  if (filters.yearMax)
+    params.set("filters[year][$lte]", String(filters.yearMax));
+
+  if (filters.sort) params.set("sort", filters.sort);
+
   if (filters.page) params.set("pagination[page]", String(filters.page));
   if (filters.pageSize)
     params.set("pagination[pageSize]", String(filters.pageSize));

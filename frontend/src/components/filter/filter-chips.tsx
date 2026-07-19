@@ -3,22 +3,26 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useTransition } from "react";
 import { cn } from "@/lib/utils";
-import type { VehicleType } from "@/lib/types";
 
-interface FilterOption {
-  value: VehicleType | "all" | "promo";
+export interface FilterChipOption {
+  value: string;
   label: string;
+  isPromo?: boolean;
 }
 
-const TYPE_OPTIONS: FilterOption[] = [
+const MOTOR_OPTIONS: FilterChipOption[] = [
   { value: "all", label: "Semua" },
   { value: "matic", label: "Matic" },
   { value: "manual", label: "Manual" },
   { value: "sport", label: "Sport" },
   { value: "cruiser", label: "Cruiser" },
   { value: "scoopy", label: "Scoopy" },
-  { value: "promo", label: "Promo" },
+  { value: "promo", label: "Promo", isPromo: true },
 ];
+
+interface FilterChipsProps {
+  options?: FilterChipOption[];
+}
 
 function FireIcon({ className }: { className?: string }) {
   return (
@@ -32,7 +36,7 @@ function FireIcon({ className }: { className?: string }) {
   );
 }
 
-export function FilterChips() {
+export function FilterChips({ options = MOTOR_OPTIONS }: FilterChipsProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
@@ -68,11 +72,10 @@ export function FilterChips() {
   return (
     <div className="w-fit rounded-xl bg-surface/50 px-3 py-2 sm:px-5 sm:py-2.5">
       <div className="flex gap-2 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-none sm:flex-wrap sm:overflow-visible">
-        {TYPE_OPTIONS.map((option) => {
+        {options.map((option) => {
           const isActive = currentValue === option.value;
-          const isPromo = option.value === "promo";
 
-          if (isPromo) {
+          if (option.isPromo) {
             return (
               <button
                 key={option.value}

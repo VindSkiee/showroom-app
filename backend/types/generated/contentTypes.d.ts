@@ -441,6 +441,121 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCarCar extends Struct.CollectionTypeSchema {
+  collectionName: 'cars';
+  info: {
+    description: 'Mobil untuk E-Catalog';
+    displayName: 'Car';
+    pluralName: 'cars';
+    singularName: 'car';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    availabilityStatus: Schema.Attribute.Enumeration<
+      ['available', 'sold_out']
+    > &
+      Schema.Attribute.DefaultTo<'available'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    defects: Schema.Attribute.Component<'defect-item.defect-item', true>;
+    defectStatus: Schema.Attribute.Enumeration<['none', 'minor', 'major']> &
+      Schema.Attribute.DefaultTo<'none'>;
+    documentNote: Schema.Attribute.Text;
+    documentStatus: Schema.Attribute.Enumeration<['complete', 'incomplete']> &
+      Schema.Attribute.DefaultTo<'complete'>;
+    images: Schema.Attribute.Media<'images', true>;
+    licensePlate: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::car.car'> &
+      Schema.Attribute.Private;
+    model: Schema.Attribute.String & Schema.Attribute.Required;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    price: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    promo: Schema.Attribute.Relation<'manyToOne', 'api::promo.promo'>;
+    publishedAt: Schema.Attribute.DateTime;
+    purchasePrice: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    sales: Schema.Attribute.Relation<'oneToMany', 'api::sale.sale'>;
+    stock: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<1>;
+    stockSold: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    taxExpiredFrom: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 2030;
+          min: 2020;
+        },
+        number
+      >;
+    taxExpiryYear: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 2030;
+          min: 2020;
+        },
+        number
+      >;
+    taxStatus: Schema.Attribute.Enumeration<['active', 'expired', 'unknown']> &
+      Schema.Attribute.DefaultTo<'unknown'>;
+    type: Schema.Attribute.Enumeration<
+      [
+        'suv',
+        'sedan',
+        'mpv',
+        'hatchback',
+        'sport',
+        'lcgc',
+        'pickup',
+        'matic',
+        'manual',
+      ]
+    > &
+      Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    video: Schema.Attribute.Media<'videos'>;
+    year: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 2030;
+          min: 1990;
+        },
+        number
+      >;
+  };
+}
+
 export interface ApiPromoPromo extends Struct.CollectionTypeSchema {
   collectionName: 'promos';
   info: {
@@ -454,6 +569,7 @@ export interface ApiPromoPromo extends Struct.CollectionTypeSchema {
   };
   attributes: {
     banner: Schema.Attribute.Media<'images'>;
+    cars: Schema.Attribute.Relation<'oneToMany', 'api::car.car'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -493,6 +609,7 @@ export interface ApiSaleSale extends Struct.CollectionTypeSchema {
   };
   attributes: {
     buyerName: Schema.Attribute.String;
+    car: Schema.Attribute.Relation<'manyToOne', 'api::car.car'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -561,7 +678,31 @@ export interface ApiVehicleVehicle extends Struct.CollectionTypeSchema {
       >;
     promo: Schema.Attribute.Relation<'manyToOne', 'api::promo.promo'>;
     publishedAt: Schema.Attribute.DateTime;
+    purchasePrice: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
     sales: Schema.Attribute.Relation<'oneToMany', 'api::sale.sale'>;
+    stock: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<1>;
+    stockSold: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
     taxExpiredFrom: Schema.Attribute.Integer &
       Schema.Attribute.SetMinMax<
         {
@@ -1111,6 +1252,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::car.car': ApiCarCar;
       'api::promo.promo': ApiPromoPromo;
       'api::sale.sale': ApiSaleSale;
       'api::vehicle.vehicle': ApiVehicleVehicle;

@@ -1,11 +1,11 @@
 {
   "kind": "collectionType",
-  "collectionName": "vehicles",
+  "collectionName": "cars",
   "info": {
-    "singularName": "vehicle",
-    "pluralName": "vehicles",
-    "displayName": "Vehicle",
-    "description": "Kendaraan untuk E-Catalog"
+    "singularName": "car",
+    "pluralName": "cars",
+    "displayName": "Car",
+    "description": "Mobil untuk E-Catalog"
   },
   "options": {
     "draftAndPublish": true
@@ -26,7 +26,7 @@
     },
     "type": {
       "type": "enumeration",
-      "enum": ["matic", "manual", "sport", "cruiser", "scoopy"],
+      "enum": ["suv", "sedan", "mpv", "hatchback", "sport", "lcgc", "pickup", "matic", "manual"],
       "required": true
     },
     "price": {
@@ -107,13 +107,13 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::promo.promo",
-      "inversedBy": "vehicles"
+      "inversedBy": "cars"
     },
     "sales": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::sale.sale",
-      "mappedBy": "vehicle"
+      "mappedBy": "car"
     }
   }
 }

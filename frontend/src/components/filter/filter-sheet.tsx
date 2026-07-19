@@ -9,7 +9,7 @@ import { motionTokens, slideUpVariants } from "@/lib/motion-tokens";
 const STATUS_OPTIONS = [
   { value: "all", label: "Semua Status" },
   { value: "available", label: "Tersedia" },
-  { value: "sold_out", label: "Terjual" },
+  { value: "sold_out", label: "Tidak Tersedia" },
 ] as const;
 
 const SORT_OPTIONS = [

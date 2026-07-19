@@ -39,6 +39,12 @@
       "relation": "oneToMany",
       "target": "api::vehicle.vehicle",
       "mappedBy": "promo"
+    },
+    "cars": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::car.car",
+      "mappedBy": "promo"
     }
   }
 }

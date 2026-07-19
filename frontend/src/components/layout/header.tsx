@@ -12,7 +12,9 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: "/", label: "Katalog" },
+  { href: "/", label: "Motor" },
+  { href: "/cars", label: "Mobil" },
+  { href: "/admin/dashboard", label: "Dashboard" },
 ];
 
 export function Header() {
@@ -25,7 +27,7 @@ export function Header() {
         <div className="flex h-16 items-center justify-between sm:h-18">
           {/* Logo */}
           <Link href="/" className="text-lg font-bold text-ink sm:text-xl">
-            Showroom Motor
+            Showroom
           </Link>
 
           {/* Desktop nav */}

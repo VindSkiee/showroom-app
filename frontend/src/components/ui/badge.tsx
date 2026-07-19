@@ -1,4 +1,3 @@
-import type { VehicleStatus, VehicleType } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface BadgeProps {
@@ -29,22 +28,28 @@ export function Badge({ children, variant = "default", className }: BadgeProps) 
   );
 }
 
-export function StatusBadge({ status }: { status: VehicleStatus }) {
+export function StatusBadge({ status }: { status: "available" | "sold_out" }) {
   return (
     <Badge variant={status === "available" ? "success" : "muted"}>
-      {status === "available" ? "Tersedia" : "Terjual"}
+      {status === "available" ? "Tersedia" : "Tidak Tersedia"}
     </Badge>
   );
 }
 
-export function TypeBadge({ type }: { type: VehicleType }) {
-  const labels: Record<VehicleType, string> = {
-    matic: "Matic",
-    manual: "Manual",
-    sport: "Sport",
-    cruiser: "Cruiser",
-    scoopy: "Scoopy",
-  };
+const typeLabels: Record<string, string> = {
+  matic: "Matic",
+  manual: "Manual",
+  sport: "Sport",
+  cruiser: "Cruiser",
+  scoopy: "Scoopy",
+  suv: "SUV",
+  sedan: "Sedan",
+  mpv: "MPV",
+  hatchback: "Hatchback",
+  lcgc: "LCGC",
+  pickup: "Pickup",
+};
 
-  return <Badge variant="default">{labels[type]}</Badge>;
+export function TypeBadge({ type }: { type: string }) {
+  return <Badge variant="default">{typeLabels[type] || type}</Badge>;
 }

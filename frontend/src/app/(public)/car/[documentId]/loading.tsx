@@ -1,5 +1,5 @@
 import { CatalogDetailSkeleton } from "@/components/catalog/catalog-detail-skeleton";
 
-export function VehicleDetailSkeleton() {
+export default function CarDetailLoading() {
   return <CatalogDetailSkeleton />;
 }
