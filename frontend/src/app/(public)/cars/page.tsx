@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { CatalogGrid } from "@/components/catalog/catalog-grid";
 import { SearchInput } from "@/components/filter/search-input";
@@ -50,13 +51,43 @@ export default async function CarsPage({ searchParams }: CarsPageProps) {
         <Container>
           {/* Header */}
           <ScrollRevealWrapper>
-            <div className="mb-6 sm:mb-8">
-              <h1 className="text-2xl font-bold text-ink sm:text-3xl">
-                Katalog Mobil
-              </h1>
-              <p className="mt-2 text-ink-muted">
-                Temukan mobil bekas berkualitas dengan surat lengkap
-              </p>
+            <div className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-ink sm:text-3xl tracking-tighter">
+                  Koleksi Mobil Terbaik
+                </h1>
+                <p className="mt-2 text-ink-muted tracking-tight">
+                  Mobil bekas pilihan dengan kondisi prima. Surat lengkap,
+                  harga transparan, siap antar kamu ke mana saja.
+                </p>
+              </div>
+
+              <Link
+                href="/"
+                // 1. Ubah border menjadi ring-inset agar bebas glitch, dan set overflow-hidden
+                className="group relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-xl bg-transparent px-5 py-3 text-sm font-medium text-ink ring-1 ring-inset ring-ink transition-all duration-300 ease-out active:scale-[0.98] hover:text-white hover:ring-0 hover:shadow-lg hover:shadow-red-600/30"
+              >
+                {/* 2. Layer Background Gradient (Absolute) - Animasinya diatur via opacity agar super mulus */}
+                <div className="absolute inset-0 z-0 bg-gradient-to-r from-red-600 to-black opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" />
+
+                {/* 3. Bungkus teks dan panah dengan span relative z-10 agar selalu berada di atas gradient */}
+                <span className="relative z-10 flex items-center tracking-tighter">
+                  Lihat Koleksi Motor
+                  <svg
+                    className="h-4 w-0 -translate-x-3 opacity-0 transition-all duration-300 ease-out group-hover:ml-2 group-hover:w-4 group-hover:translate-x-0 group-hover:opacity-100"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.5}
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m9 5.25 6.75 6.75L9 18.75"
+                    />
+                  </svg>
+                </span>
+              </Link>
             </div>
           </ScrollRevealWrapper>
 

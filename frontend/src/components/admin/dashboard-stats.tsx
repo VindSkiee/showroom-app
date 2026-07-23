@@ -23,7 +23,7 @@ function StatCard({
       <p className="text-xs text-ink-muted sm:text-sm">{label}</p>
       <p
         className={`mt-1 text-xl font-bold sm:text-2xl ${
-          accent ? "text-accent" : "text-ink"
+          accent ? "text-green-500" : "text-ink"
         }`}
       >
         {value}

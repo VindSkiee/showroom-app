@@ -8,7 +8,7 @@ interface BadgeProps {
 
 const variantStyles: Record<NonNullable<BadgeProps["variant"]>, string> = {
   default: "bg-surface text-ink",
-  success: "bg-accent/10 text-accent",
+  success: "bg-black/10 text-ink",
   warning: "bg-amber-100 text-amber-700",
   danger: "bg-danger/10 text-danger",
   muted: "bg-surface text-ink-muted",

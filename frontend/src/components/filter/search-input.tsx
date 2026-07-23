@@ -28,7 +28,7 @@ export function SearchInput() {
   return (
     <div className="group relative">
       <svg
-        className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-muted stroke-2 group-focus-within:stroke-[2.5] group-focus-within:text-accent/100 transition-all duration-200"
+        className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-ink-muted stroke-2 group-focus-within:stroke-[2.5] group-focus-within:text-black transition-all duration-200"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -44,10 +44,10 @@ export function SearchInput() {
         defaultValue={currentValue}
         onChange={(e) => handleSearch(e.target.value)}
         placeholder="Cari motor..."
-        className="w-full rounded-xl border border-stone-200 bg-white py-3 pl-12 pr-4 text-base text-ink placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-accent/100 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200"
+        className="w-full rounded-xl border border-stone-200 bg-white py-3 pl-12 pr-4 text-base text-ink placeholder:text-ink-muted focus:outline-none focus:ring-1 focus:ring-black disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200"
       />
       {isPending && (
-        <div className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+        <div className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin rounded-full border-2 border-black border-t-transparent" />
       )}
     </div>
   );

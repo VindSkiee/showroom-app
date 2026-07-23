@@ -27,7 +27,7 @@ interface FilterChipsProps {
 function FireIcon({ className }: { className?: string }) {
   return (
     <svg
-      className={cn("h-3.5 w-3.5 sm:h-4 sm:w-4", className)}
+      className={cn("h-3 w-3 sm:h-4 sm:w-4", className)}
       viewBox="0 0 24 24"
       fill="currentColor"
     >
@@ -70,8 +70,9 @@ export function FilterChips({ options = MOTOR_OPTIONS }: FilterChipsProps) {
   );
 
   return (
-    <div className="w-fit rounded-xl bg-surface/50 px-3 py-2 sm:px-5 sm:py-2.5">
-      <div className="flex gap-2 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-none sm:flex-wrap sm:overflow-visible">
+    <div className="w-full max-w-full sm:w-fit rounded-xl bg-surface/50 p-1.5 sm:px-5 sm:py-2.5">
+      {/* Tambahkan pr-2 di mobile agar item terakhir tidak mentok di pinggir container */}
+      <div className="flex w-full gap-2 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-none pb-1 pr-2 sm:pb-0 sm:pr-0 sm:flex-wrap sm:overflow-visible">
         {options.map((option) => {
           const isActive = currentValue === option.value;
 
@@ -83,7 +84,8 @@ export function FilterChips({ options = MOTOR_OPTIONS }: FilterChipsProps) {
                 disabled={isPending}
                 aria-pressed={isActive}
                 className={cn(
-                  "group relative overflow-hidden whitespace-nowrap rounded-xl px-5 py-2 text-sm font-bold snap-start transition-all duration-300 ease-out",
+                  // Tambahkan shrink-0 di sini
+                  "shrink-0 group relative overflow-hidden whitespace-nowrap rounded-xl px-3 py-1.5 text-xs sm:px-5 sm:py-2 sm:text-sm font-bold snap-start transition-all duration-300 ease-out",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger focus-visible:ring-offset-2",
                   "disabled:opacity-50 disabled:cursor-not-allowed active:scale-95",
                   isActive
@@ -110,7 +112,8 @@ export function FilterChips({ options = MOTOR_OPTIONS }: FilterChipsProps) {
               disabled={isPending}
               aria-pressed={isActive}
               className={cn(
-                "whitespace-nowrap rounded-xl px-5 py-2 text-sm font-medium snap-start transition-all duration-300 ease-out",
+                // Tambahkan shrink-0 di sini juga
+                "shrink-0 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs sm:px-5 sm:py-2 sm:text-sm font-medium snap-start transition-all duration-300 ease-out",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
                 "disabled:opacity-50 disabled:cursor-not-allowed active:scale-95",
                 isActive

@@ -174,7 +174,7 @@ export function FilterSheet() {
       {/* Trigger button */}
       <button
         onClick={handleOpen}
-        className="flex items-center gap-2 rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm font-medium text-ink hover:bg-surface"
+        className="flex items-center gap-2 rounded-xl border border-stone-200 hover:border-black bg-white px-4 py-3 text-sm font-medium text-ink cursor-pointer transition-colors duration-200"
       >
         <svg
           className="h-5 w-5"

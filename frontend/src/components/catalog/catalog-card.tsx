@@ -35,6 +35,8 @@ export function CatalogCard({ item, basePath }: CatalogCardProps) {
 
   return (
     <motion.div
+      // Tambahkan h-full agar semua card dalam satu baris grid memiliki tinggi yang sama
+      className="h-full"
       whileHover={prefersReduced ? undefined : { scale: 1.02 }}
       whileTap={prefersReduced ? undefined : { scale: 0.98 }}
       transition={{
@@ -44,16 +46,17 @@ export function CatalogCard({ item, basePath }: CatalogCardProps) {
     >
       <Link
         href={`${basePath}/${item.documentId}`}
-        className="group flex flex-col overflow-hidden rounded-xl bg-surface sm:rounded-2xl"
+        className="group flex h-full flex-col overflow-hidden rounded-xl bg-surface sm:rounded-2xl shadow-sm border border-stone-100"
       >
         {/* Image */}
-        <div className="relative aspect-[3/2] overflow-hidden bg-stone-100 lg:aspect-[4/3]">
+        <div className="relative aspect-[4/3] overflow-hidden bg-stone-100 w-full">
           {imageUrl ? (
             <Image
               src={imageUrl}
               alt={item.name}
               fill
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
+              // sizes sudah sangat tepat untuk 2 kolom mobile
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
               onError={() => setImgError(true)}
             />
@@ -64,10 +67,10 @@ export function CatalogCard({ item, basePath }: CatalogCardProps) {
           )}
 
           {/* Badges overlay */}
-          <div className="absolute left-1.5 top-1.5 flex gap-1 sm:left-2 sm:top-2 sm:gap-1.5 lg:left-3 lg:top-3 lg:gap-2">
+          <div className="absolute left-1.5 top-1.5 flex flex-wrap gap-1 pr-1.5 sm:left-2 sm:top-2 sm:gap-1.5 lg:left-3 lg:top-3 lg:gap-2 lg:pr-3">
             <TypeBadge type={item.type} />
             {hasActivePromo && (
-              <span className="rounded-md bg-danger px-1.5 py-0.5 text-[10px] font-bold text-white sm:rounded-lg sm:px-2 sm:py-1 sm:text-xs">
+              <span className="rounded-md bg-danger px-1.5 py-0.5 text-[9px] font-bold text-white shadow-sm sm:rounded-lg sm:px-2 sm:py-1 sm:text-xs">
                 -{item.promo!.discount}%
               </span>
             )}
@@ -75,28 +78,38 @@ export function CatalogCard({ item, basePath }: CatalogCardProps) {
         </div>
 
         {/* Content */}
-        <div className="flex flex-1 flex-col gap-1 p-2 sm:gap-1.5 sm:p-2.5 lg:gap-2 lg:p-4">
-          <div className="flex items-start justify-between gap-1">
-            <h3 className="text-xs font-semibold leading-tight text-ink line-clamp-1 sm:text-sm lg:text-base">
+        {/* Hapus gap-1 agar ruang bisa dimaksimalkan, gunakan margin spesifik */}
+        <div className="flex flex-1 flex-col p-2.5 sm:p-3 lg:p-4">
+          
+          {/* Judul & Status */}
+          {/* Ubah flex-row menjadi flex-col di mobile agar status badge tidak menekan judul */}
+          <div className="flex flex-col items-start gap-1.5 sm:flex-row sm:justify-between sm:gap-2">
+            <h3 className="text-xs font-bold leading-tight text-ink line-clamp-2 sm:text-sm lg:text-base">
               {item.name}
             </h3>
-            <StatusBadge status={item.availabilityStatus} />
+            {/* Bungkus shrink-0 agar badge tidak gepeng */}
+            <div className="shrink-0">
+              <StatusBadge status={item.availabilityStatus} />
+            </div>
           </div>
 
-          <p className="text-[10px] text-ink-muted line-clamp-1 sm:text-xs lg:text-sm">{item.model}</p>
+          <p className="mt-1 text-[10px] text-ink-muted line-clamp-1 sm:mt-1.5 sm:text-xs lg:text-sm">
+            {item.model}
+          </p>
 
-          <div className="mt-auto">
+          {/* Area Harga (mt-auto akan mendorong harga selalu ke bawah) */}
+          <div className="mt-auto pt-2 sm:pt-3">
             {hasActivePromo && promoPrice !== null ? (
-              <>
+              <div className="flex flex-col">
                 <p className="text-[10px] text-ink-muted line-through sm:text-xs lg:text-sm">
                   {formatCurrency(item.price)}
                 </p>
-                <p className="text-sm font-bold text-accent sm:text-base lg:text-lg">
+                <p className="text-sm font-bold text-accent sm:text-base lg:text-lg leading-tight">
                   {formatCurrency(promoPrice)}
                 </p>
-              </>
+              </div>
             ) : (
-              <p className="text-sm font-bold text-accent sm:text-base lg:text-lg">
+              <p className="text-sm font-bold text-ink sm:text-base lg:text-lg leading-tight">
                 {formatCurrency(item.price)}
               </p>
             )}

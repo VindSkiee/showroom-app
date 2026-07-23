@@ -10,17 +10,17 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Showroom Motor - Katalog Motor Bekas Berkualitas",
-    template: "%s | Showroom Motor",
+    default: "Toko Showroom Aneka Motor - Katalog Mobil & Motor Bekas Berkualitas",
+    template: "%s | Toko Showroom Aneka Motor",
   },
   description:
-    "Temukan motor bekas berkualitas dengan surat lengkap. Harga terjangkau, transparan, dan terpercaya.",
-  keywords: ["motor bekas", "katalog motor", "showroom motor", "motor murah"],
-  authors: [{ name: "Showroom Motor" }],
+    "Jual beli mobil dan motor bekas berkualitas di Purwakarta. Cash & credit, surat lengkap, harga transparan.",
+  keywords: ["mobil bekas", "motor bekas", "showroom purwakarta", "katalog mobil", "aneka motor purwakarta"],
+  authors: [{ name: "Toko Showroom Aneka Motor" }],
   openGraph: {
     type: "website",
     locale: "id_ID",
-    siteName: "Showroom Motor",
+    siteName: "Toko Showroom Aneka Motor",
   },
 };
 
@@ -28,7 +28,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#FAFAF9",
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
