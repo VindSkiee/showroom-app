@@ -26,7 +26,17 @@
     },
     "type": {
       "type": "enumeration",
-      "enum": ["suv", "sedan", "mpv", "hatchback", "sport", "lcgc", "pickup", "matic", "manual"],
+      "enum": [
+        "suv",
+        "sedan",
+        "mpv",
+        "hatchback",
+        "sport",
+        "lcgc",
+        "pickup",
+        "matic",
+        "manual"
+      ],
       "required": true
     },
     "price": {
@@ -42,7 +52,10 @@
     },
     "documentStatus": {
       "type": "enumeration",
-      "enum": ["complete", "incomplete"],
+      "enum": [
+        "complete",
+        "incomplete"
+      ],
       "default": "complete"
     },
     "documentNote": {
@@ -50,7 +63,11 @@
     },
     "taxStatus": {
       "type": "enumeration",
-      "enum": ["active", "expired", "unknown"],
+      "enum": [
+        "active",
+        "expired",
+        "unknown"
+      ],
       "default": "unknown"
     },
     "taxExpiryYear": {
@@ -65,12 +82,19 @@
     },
     "defectStatus": {
       "type": "enumeration",
-      "enum": ["none", "minor", "major"],
+      "enum": [
+        "none",
+        "minor",
+        "major"
+      ],
       "default": "none"
     },
     "availabilityStatus": {
       "type": "enumeration",
-      "enum": ["available", "sold_out"],
+      "enum": [
+        "available",
+        "sold_out"
+      ],
       "default": "available"
     },
     "stock": {
@@ -96,12 +120,16 @@
     "images": {
       "type": "media",
       "multiple": true,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "video": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["videos"]
+      "allowedTypes": [
+        "videos"
+      ]
     },
     "promo": {
       "type": "relation",

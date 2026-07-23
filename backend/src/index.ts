@@ -3,41 +3,49 @@ import type { Core } from "@strapi/strapi";
 export default {
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
     // ============================================
-    // 0. Set public permissions for Car API
+    // 0. Ensure users-permissions plugin permissions
     // ============================================
     try {
-      const publicRole = await strapi.db.query("plugin::users-permissions.role").findOne({
-        where: { type: "public" },
-      });
-
-      if (publicRole) {
-        const actions = ["api::car.car.find", "api::car.car.findOne"];
-        for (const action of actions) {
-          const existing = await strapi.db.query("plugin::users-permissions.permission").findOne({
-            where: { action, role: publicRole.id },
+      const ensurePermission = async (action: string, roleType: string) => {
+        const role = await strapi.db.query("plugin::users-permissions.role").findOne({
+          where: { type: roleType },
+        });
+        if (!role) return;
+        const existing = await strapi.db.query("plugin::users-permissions.permission").findOne({
+          where: { action, role: role.id },
+        });
+        if (!existing) {
+          await strapi.db.query("plugin::users-permissions.permission").create({
+            data: { action, role: role.id },
           });
-          if (!existing) {
-            await strapi.db.query("plugin::users-permissions.permission").create({
-              data: { action, role: publicRole.id },
-            });
-          }
+          strapi.log.info(`  ➕ Permission: ${action} → ${roleType}`);
         }
+      };
 
-        const saleActions = ["api::sale.sale.find", "api::sale.sale.findOne"];
-        for (const action of saleActions) {
-          const existing = await strapi.db.query("plugin::users-permissions.permission").findOne({
-            where: { action, role: publicRole.id },
-          });
-          if (!existing) {
-            await strapi.db.query("plugin::users-permissions.permission").create({
-              data: { action, role: publicRole.id },
-            });
-          }
-        }
-        strapi.log.info("✅ Public permissions set for Car & Sale API");
-      }
+      // Auth endpoints (login, register, etc.) must be public
+      await ensurePermission("plugin::users-permissions.auth.callback", "public");
+      await ensurePermission("plugin::users-permissions.auth.register", "public");
+      await ensurePermission("plugin::users-permissions.auth.forgotPassword", "public");
+      await ensurePermission("plugin::users-permissions.auth.resetPassword", "public");
+      await ensurePermission("plugin::users-permissions.auth.emailConfirmation", "public");
+      await ensurePermission("plugin::users-permissions.auth.sendEmailConfirmation", "public");
+      await ensurePermission("plugin::users-permissions.auth.refresh", "public");
+
+      // User.me must be available to authenticated users
+      await ensurePermission("plugin::users-permissions.user.me", "authenticated");
+      await ensurePermission("plugin::users-permissions.auth.changePassword", "authenticated");
+
+      // Public API permissions for Car
+      await ensurePermission("api::car.car.find", "public");
+      await ensurePermission("api::car.car.findOne", "public");
+
+      // Public API permissions for Sale (readonly for dashboard)
+      await ensurePermission("api::sale.sale.find", "public");
+      await ensurePermission("api::sale.sale.findOne", "public");
+
+      strapi.log.info("✅ All permissions verified");
     } catch (err) {
-      strapi.log.warn("⚠️  Could not set Car permissions:", (err as Error).message);
+      strapi.log.warn("⚠️  Could not set permissions:", (err as Error).message);
     }
 
     // ============================================
@@ -238,6 +246,46 @@ export default {
       strapi.log.info(`✅ Seed: ${cars.length} cars created`);
     } else {
       strapi.log.info(`ℹ️  ${carCount} cars already exist, skipping seed`);
+    }
+
+    // ============================================
+    // 3. Create/verify admin user for dashboard login
+    // ============================================
+    try {
+      const bcrypt = require("bcryptjs");
+      const adminEmail = "admin@showroom.com";
+      const authRole = await strapi.db.query("plugin::users-permissions.role").findOne({
+        where: { type: "authenticated" },
+      });
+      if (!authRole) throw new Error("Authenticated role not found");
+
+      const hashed = await bcrypt.hash("admin123", 10);
+      const existing = await strapi.db.query("plugin::users-permissions.user").findOne({
+        where: { email: adminEmail },
+      });
+
+      if (!existing) {
+        await strapi.db.query("plugin::users-permissions.user").create({
+          data: {
+            username: "admin",
+            email: adminEmail,
+            password: hashed,
+            confirmed: true,
+            blocked: false,
+            provider: "local",
+            role: authRole.id,
+          },
+        });
+        strapi.log.info(`✅ Admin user created: ${adminEmail} / admin123`);
+      } else {
+        await strapi.db.query("plugin::users-permissions.user").update({
+          where: { id: existing.id },
+          data: { password: hashed, confirmed: true, blocked: false, provider: "local" },
+        });
+        strapi.log.info(`✅ Admin user verified: ${adminEmail}`);
+      }
+    } catch (err) {
+      strapi.log.warn("⚠️  Could not create admin user:", (err as Error).message);
     }
   },
 };

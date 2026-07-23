@@ -1,10 +1,12 @@
+"use client";
+
 import { formatCurrency } from "@/lib/utils";
 
 interface DashboardStatsProps {
-  totalStock: number;
+  motorStock: number;
+  mobilStock: number;
   totalSold: number;
   totalRevenue: number;
-  totalProfit: number;
 }
 
 function StatCard({
@@ -31,21 +33,17 @@ function StatCard({
 }
 
 export function DashboardStats({
-  totalStock,
+  motorStock,
+  mobilStock,
   totalSold,
   totalRevenue,
-  totalProfit,
 }: DashboardStatsProps) {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-      <StatCard label="Total Stok" value={`${totalStock} unit`} />
-      <StatCard label="Terjual" value={`${totalSold} unit`} />
-      <StatCard label="Revenue" value={formatCurrency(totalRevenue)} />
-      <StatCard
-        label="Profit Kotor"
-        value={formatCurrency(totalProfit)}
-        accent={totalProfit > 0}
-      />
+      <StatCard label="Stok Motor" value={`${motorStock} unit`} />
+      <StatCard label="Stok Mobil" value={`${mobilStock} unit`} />
+      <StatCard label="Total Terjual" value={`${totalSold} unit`} />
+      <StatCard label="Revenue Bulan Ini" value={formatCurrency(totalRevenue)} accent />
     </div>
   );
 }

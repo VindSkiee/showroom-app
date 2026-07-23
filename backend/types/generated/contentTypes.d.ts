@@ -617,6 +617,7 @@ export interface ApiSaleSale extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::sale.sale'> &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    quantity: Schema.Attribute.Integer;
     saleDate: Schema.Attribute.Date & Schema.Attribute.Required;
     salePrice: Schema.Attribute.Integer &
       Schema.Attribute.Required &

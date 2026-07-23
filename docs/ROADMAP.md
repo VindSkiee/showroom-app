@@ -24,9 +24,9 @@
 | Metric | Value |
 |--------|-------|
 | Total Sessions | 10 |
-| Done | 9/10 |
-| Current | S10 |
-| Last Updated | 2026-07-07 |
+| Done | 10/10 |
+| Current | ✅ |
+| Last Updated | 2026-07-19 |
 
 ---
 
@@ -478,3 +478,85 @@ S0 (Foundation)
 - CORS origin uses FRONTEND_URL env var (set in Railway dashboard)
 - Frontend env vars: NEXT_PUBLIC_STRAPI_URL, NEXT_PUBLIC_WHATSAPP_NUMBER, NEXT_PUBLIC_SITE_URL
 - Backend env vars: FRONTEND_URL (for CORS), DATABASE_* (for PostgreSQL)
+
+---
+
+## S10: Car Catalog, Admin Dashboard & Login
+
+**Status:** ✅
+**Goal:** Mobil catalog + admin dashboard + login system
+
+**Files:**
+
+| Action | Path | Purpose |
+|--------|------|---------|
+| Create | `backend/src/api/car/` | Car content type (schema, controller, route, service) |
+| Edit | `backend/src/api/promo/schemas/promo.schema.ts` | Add cars relation to promo |
+| Edit | `backend/src/api/sale/services/sale.ts` | Stock lifecycle hooks (afterCreate, afterDelete) |
+| Edit | `backend/src/api/vehicle/schemas/vehicle.schema.ts` | Add stock, stockSold, purchasePrice fields |
+| Edit | `backend/src/api/car/schemas/car.schema.ts` | Add stock, stockSold, purchasePrice fields |
+| Edit | `backend/src/api/sale/schemas/sale.schema.ts` | Add car relation to sale |
+| Edit | `backend/src/index.ts` | Bootstrap: seed cars, stocks, permissions, admin user |
+| Create | `frontend/src/components/catalog/` | CatalogCard, CatalogGrid, CatalogDetail, skeletons |
+| Edit | `frontend/src/components/vehicle/vehicle-card.tsx` | Refactor to wrap CatalogCard |
+| Edit | `frontend/src/components/vehicle/vehicle-grid.tsx` | Refactor to wrap CatalogGrid |
+| Edit | `frontend/src/components/vehicle/vehicle-detail.tsx` | Refactor to wrap CatalogDetail |
+| Edit | `frontend/src/components/filter/filter-chips.tsx` | Generic with `options` prop |
+| Edit | `frontend/src/lib/types.ts` | Add CarType, Car, CarFilters, CatalogItem |
+| Edit | `frontend/src/lib/strapi.ts` | Add getCars, getCar, getSales |
+| Create | `frontend/src/lib/constants.ts` | CAR_TYPE_OPTIONS, MOTOR_TYPE_OPTIONS |
+| Edit | `frontend/src/components/ui/badge.tsx` | Support CarType, "Tidak Tersedia" status |
+| Edit | `frontend/src/components/layout/header.tsx` | Add Mobil + Dashboard nav |
+| Edit | `frontend/src/app/(public)/page.tsx` | "Katalog Motor" heading |
+| Create | `frontend/src/app/(public)/cars/page.tsx` | Car catalog SSR |
+| Create | `frontend/src/app/(public)/car/[documentId]/page.tsx` | Car detail SSR |
+| Create | `frontend/src/app/(public)/car/[documentId]/not-found.tsx` | Car 404 |
+| Create | `frontend/src/app/(public)/car/[documentId]/error.tsx` | Car error boundary |
+| Create | `frontend/src/app/(public)/car/[documentId]/loading.tsx` | Car detail loading |
+| Create | `frontend/src/app/(public)/cars/loading.tsx` | Car catalog loading |
+| Create | `frontend/src/components/admin/` | DashboardStats, StockTable, RecentSales |
+| Create | `frontend/src/app/(public)/admin/dashboard/page.tsx` | Admin dashboard |
+| Create | `frontend/src/app/(public)/admin/dashboard/loading.tsx` | Dashboard loading |
+| Create | `frontend/src/lib/auth.ts` | Auth helpers |
+| Create | `frontend/src/app/api/auth/login/route.ts` | Login API (proxy to Strapi) |
+| Create | `frontend/src/app/api/auth/me/route.ts` | Token validation API |
+| Create | `frontend/src/app/api/auth/logout/route.ts` | Logout API (clear cookie) |
+| Create | `frontend/src/proxy.ts` | Next.js proxy (middleware) - protect /admin/* |
+| Create | `frontend/src/components/admin/logout-button.tsx` | Logout button component |
+| Create | `frontend/src/app/(public)/admin/login/page.tsx` | Login form page |
+
+**Verification:**
+- [x] Halaman `/cars` menampilkan grid mobil
+- [x] Halaman `/car/[documentId]` detail mobil
+- [x] Filter mobil by type berfungsi
+- [x] Dashboard stok + keuangan (motor & mobil)
+- [x] Status "Tidak Tersedia" (bukan "Terjual")
+- [x] Penjualan update stok otomatis (create/delete sale)
+- [x] Login/keluar dashboard dengan JWT cookie
+- [x] Proxy melindungi seluruh `/admin/*` route
+- [x] Build frontend tanpa error/warning
+
+**Log:**
+- Created Car content type in Strapi with full schema
+- Added generic CatalogCard, CatalogGrid, CatalogDetail components
+- Refactored Vehicle components as thin wrappers around catalog shared components
+- Stock fields (stock, stockSold, purchasePrice) added to Vehicle & Car schemas
+- Sale lifecycle hooks: afterCreate decrements stock, afterDelete reverses
+- Bootstrap seeds 8 cars with stock data + updates existing vehicle stock
+- Bootstrap sets public permissions for Car & Sale, creates admin@showroom.com
+- Dashboard shows: total stock, total sold, revenue, profit, stock tables, recent sales
+- Login: POST /api/auth/login proxies to Strapi local auth, sets HTTP-only cookie
+- Proxy (middleware): validates token via Strapi /api/users/me, redirects if invalid
+- Login page: minimal form with error handling, redirect after success
+- Logout: clears cookie, redirects to login
+- Build pass without errors/warnings (Next.js 16 proxy convention used)
+
+**Issues:**
+- Strapi `status` field reserved in v5 - renamed to `availabilityStatus` (in S8)
+- Next.js 16 deprecates middleware.ts → uses proxy.ts with `export async function proxy`
+
+**Notes:**
+- Admin credential: admin@showroom.com / admin123 (auto-created by bootstrap)
+- Proxy checks token on every /admin/* request; login page skips validation
+- Token expires after 24 hours (cookie maxAge)
+- All admin components use existing design tokens

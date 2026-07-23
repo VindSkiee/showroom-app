@@ -139,6 +139,7 @@ export interface Sale {
   documentId: string;
   saleDate: string;
   salePrice: number;
+  quantity: number;
   buyerName: string | null;
   vehicle: Vehicle | null;
   car: Car | null;

@@ -35,6 +35,9 @@
       "relation": "manyToOne",
       "target": "api::car.car",
       "inversedBy": "sales"
+    },
+    "quantity": {
+      "type": "integer"
     }
   }
 }
