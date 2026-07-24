@@ -1,0 +1,143 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vehicles",
+  "info": {
+    "singularName": "vehicle",
+    "pluralName": "vehicles",
+    "displayName": "Vehicle",
+    "description": "Kendaraan untuk E-Catalog"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "model": {
+      "type": "string",
+      "required": true
+    },
+    "licensePlate": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "matic",
+        "manual",
+        "sport",
+        "cruiser",
+        "scoopy"
+      ],
+      "required": true
+    },
+    "price": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+    },
+    "year": {
+      "type": "integer",
+      "required": true,
+      "min": 1990,
+      "max": 2030
+    },
+    "documentStatus": {
+      "type": "enumeration",
+      "enum": [
+        "complete",
+        "incomplete"
+      ],
+      "default": "complete"
+    },
+    "documentNote": {
+      "type": "text"
+    },
+    "taxStatus": {
+      "type": "enumeration",
+      "enum": [
+        "active",
+        "expired",
+        "unknown"
+      ],
+      "default": "unknown"
+    },
+    "taxExpiryYear": {
+      "type": "integer",
+      "min": 2020,
+      "max": 2030
+    },
+    "taxExpiredFrom": {
+      "type": "integer",
+      "min": 2020,
+      "max": 2030
+    },
+    "defectStatus": {
+      "type": "enumeration",
+      "enum": [
+        "none",
+        "minor",
+        "major"
+      ],
+      "default": "none"
+    },
+    "availabilityStatus": {
+      "type": "enumeration",
+      "enum": [
+        "available",
+        "sold_out"
+      ],
+      "default": "available"
+    },
+    "stock": {
+      "type": "integer",
+      "required": true,
+      "min": 0,
+      "default": 1
+    },
+    "stockSold": {
+      "type": "integer",
+      "min": 0,
+      "default": 0
+    },
+    "purchasePrice": {
+      "type": "integer",
+      "min": 0
+    },
+    "defects": {
+      "type": "component",
+      "repeatable": true,
+      "component": "defect-item.defect-item"
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "video": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "videos"
+      ]
+    },
+    "promo": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::promo.promo",
+      "inversedBy": "vehicles"
+    },
+    "sales": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::sale.sale",
+      "mappedBy": "vehicle"
+    }
+  }
+}
