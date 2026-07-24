@@ -12,18 +12,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const strapiRes = await fetch(`${getStrapiUrl()}/api/auth/local`, {
+    const strapiRes = await fetch(`${getStrapiUrl()}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ identifier: email, password }),
+      body: JSON.stringify({ email, password }),
     });
 
     const data = await strapiRes.json();
 
     if (!strapiRes.ok) {
       return NextResponse.json(
-        { error: data.error?.message || "Email atau password salah" },
-        { status: 401 }
+        { error: data.message || data.errors?.email?.[0] || "Email atau password salah" },
+        { status: strapiRes.status }
       );
     }
 
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 24,
+      maxAge: 60 * 60 * 24, // 24 hours (matches Sanctum expiration)
     });
 
     return response;

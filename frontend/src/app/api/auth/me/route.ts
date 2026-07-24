@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const strapiRes = await fetch(`${getStrapiUrl()}/api/users/me`, {
+    const strapiRes = await fetch(`${getStrapiUrl()}/api/user`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -19,8 +19,8 @@ export async function GET(request: NextRequest) {
       return response;
     }
 
-    const user = await strapiRes.json();
-    return NextResponse.json({ authenticated: true, user });
+    const data = await strapiRes.json();
+    return NextResponse.json({ authenticated: true, user: data.user });
   } catch {
     return NextResponse.json({ authenticated: false }, { status: 500 });
   }
