@@ -22,6 +22,14 @@ class PromoController extends Controller
 
         return response()->json([
             'data' => PromoResource::collection($promos),
+            'meta' => [
+                'pagination' => [
+                    'page' => 1,
+                    'pageSize' => count($promos),
+                    'pageCount' => 1,
+                    'total' => count($promos),
+                ],
+            ],
         ]);
     }
 }

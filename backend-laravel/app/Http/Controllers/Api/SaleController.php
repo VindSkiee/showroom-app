@@ -14,6 +14,18 @@ class SaleController extends Controller
         private SaleService $saleService
     ) {}
 
+    private function parseStrapiParam(Request $request, string $bracketKey, $default = null)
+    {
+        $qs = $request->getQueryString() ?? '';
+        if ($qs === '' || !str_contains($qs, $bracketKey)) return $default;
+
+        $decoded = urldecode($qs);
+        if (preg_match('/' . preg_quote($bracketKey, '/') . '=([^&]*)/', $decoded, $m)) {
+            return urldecode($m[1]);
+        }
+        return $default;
+    }
+
     public function index(Request $request)
     {
         $query = Sale::query();
@@ -22,20 +34,24 @@ class SaleController extends Controller
             $query->with(['vehicle', 'car']);
         }
 
-        if ($request->filled('filters[vehicle][$eq]')) {
-            $query->where('vehicle_id', $request->input('filters[vehicle][$eq]'));
+        $vehicleId = $this->parseStrapiParam($request, 'filters[vehicle][$eq]');
+        if ($vehicleId) {
+            $query->where('vehicle_id', $vehicleId);
         }
 
-        if ($request->filled('filters[car][$eq]')) {
-            $query->where('car_id', $request->input('filters[car][$eq]'));
+        $carId = $this->parseStrapiParam($request, 'filters[car][$eq]');
+        if ($carId) {
+            $query->where('car_id', $carId);
         }
 
-        if ($request->filled('filters[saleDate][$gte]')) {
-            $query->where('sale_date', '>=', $request->input('filters[saleDate][$gte]'));
+        $dateGte = $this->parseStrapiParam($request, 'filters[saleDate][$gte]');
+        if ($dateGte) {
+            $query->where('sale_date', '>=', $dateGte);
         }
 
-        if ($request->filled('filters[saleDate][$lte]')) {
-            $query->where('sale_date', '<=', $request->input('filters[saleDate][$lte]'));
+        $dateLte = $this->parseStrapiParam($request, 'filters[saleDate][$lte]');
+        if ($dateLte) {
+            $query->where('sale_date', '<=', $dateLte);
         }
 
         if ($request->filled('sort')) {
@@ -45,8 +61,8 @@ class SaleController extends Controller
             $query->orderBy($field, $direction);
         }
 
-        $page = (int) $request->input('pagination[page]', 1);
-        $pageSize = (int) $request->input('pagination[pageSize]', 20);
+        $page = (int) ($this->parseStrapiParam($request, 'pagination[page]', '1'));
+        $pageSize = (int) ($this->parseStrapiParam($request, 'pagination[pageSize]', '20'));
 
         $total = $query->count();
         $sales = $query->skip(($page - 1) * $pageSize)->take($pageSize)->get();

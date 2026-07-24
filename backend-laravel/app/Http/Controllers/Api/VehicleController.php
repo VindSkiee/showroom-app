@@ -9,6 +9,23 @@ use Illuminate\Http\Request;
 
 class VehicleController extends Controller
 {
+    private function parseStrapiParam(Request $request, string $dotKey, string $bracketKey, $default = null)
+    {
+        $value = $request->input($dotKey);
+        if ($value !== null) return $value;
+
+        // Fallback: parse raw query string for bracket notation with $ (e.g. filters[type][$eq])
+        $qs = $request->getQueryString() ?? '';
+        if ($qs === '' || !str_contains($qs, $bracketKey)) return $default;
+
+        $decoded = urldecode($qs);
+        // Extract value after the key in the query string
+        if (preg_match('/' . preg_quote($bracketKey, '/') . '=([^&]*)/', $decoded, $m)) {
+            return urldecode($m[1]);
+        }
+        return $default;
+    }
+
     public function index(Request $request)
     {
         $query = Vehicle::query();
@@ -18,73 +35,71 @@ class VehicleController extends Controller
             $query->with(['promo', 'images', 'video', 'defects.images', 'sales']);
         }
 
-        // Filter: type
-        if ($request->filled('type')) {
-            $query->where('type', $request->type);
+        // Filter: type — support both "type=matic" and "filters[type][$eq]=matic"
+        $type = $request->filled('type')
+            ? $request->type
+            : $this->parseStrapiParam($request, 'filters.type.$eq', 'filters[type][$eq]');
+        if ($type) {
+            $query->where('type', $type);
         }
 
         // Filter: availability_status
-        if ($request->filled('availabilityStatus')) {
-            $query->where('availability_status', $request->availabilityStatus);
+        $availability = $request->filled('availabilityStatus')
+            ? $request->availabilityStatus
+            : $this->parseStrapiParam($request, 'filters.availabilityStatus.$eq', 'filters[availabilityStatus][$eq]');
+        if ($availability) {
+            $query->where('availability_status', $availability);
         }
 
         // Filter: name contains
-        $nameFilter = $request->input('filters.name.$containsi')
-            ?? $request->input('filters[name][$containsi]');
+        $nameFilter = $this->parseStrapiParam($request, 'filters.name.$containsi', 'filters[name][$containsi]');
         if ($nameFilter) {
             $query->where('name', 'LIKE', '%' . $nameFilter . '%');
         }
 
         // Filter: price gte
-        $priceGte = $request->input('filters.price.$gte')
-            ?? $request->input('filters[price][$gte]');
+        $priceGte = $this->parseStrapiParam($request, 'filters.price.$gte', 'filters[price][$gte]');
         if ($priceGte) {
             $query->where('price', '>=', $priceGte);
         }
 
         // Filter: price lte
-        $priceLte = $request->input('filters.price.$lte')
-            ?? $request->input('filters[price][$lte]');
+        $priceLte = $this->parseStrapiParam($request, 'filters.price.$lte', 'filters[price][$lte]');
         if ($priceLte) {
             $query->where('price', '<=', $priceLte);
         }
 
         // Filter: year gte
-        $yearGte = $request->input('filters.year.$gte')
-            ?? $request->input('filters[year][$gte]');
+        $yearGte = $this->parseStrapiParam($request, 'filters.year.$gte', 'filters[year][$gte]');
         if ($yearGte) {
             $query->where('year', '>=', $yearGte);
         }
 
         // Filter: year lte
-        $yearLte = $request->input('filters.year.$lte')
-            ?? $request->input('filters[year][$lte]');
+        $yearLte = $this->parseStrapiParam($request, 'filters.year.$lte', 'filters[year][$lte]');
         if ($yearLte) {
             $query->where('year', '<=', $yearLte);
         }
 
         // Filter: documentStatus
-        $docStatus = $request->input('filters.documentStatus.$eq')
-            ?? $request->input('filters[documentStatus][$eq]');
+        $docStatus = $this->parseStrapiParam($request, 'filters.documentStatus.$eq', 'filters[documentStatus][$eq]');
         if ($docStatus) {
             $query->where('document_status', $docStatus);
         }
 
         // Filter: taxStatus
-        $taxStatus = $request->input('filters.taxStatus.$eq')
-            ?? $request->input('filters[taxStatus][$eq]');
+        $taxStatus = $this->parseStrapiParam($request, 'filters.taxStatus.$eq', 'filters[taxStatus][$eq]');
         if ($taxStatus) {
             $query->where('tax_status', $taxStatus);
         }
 
         // Filter: defectStatus
-        $defectStatus = $request->input('filters.defectStatus.$eq')
-            ?? $request->input('filters[defectStatus][$eq]');
+        $defectStatus = $this->parseStrapiParam($request, 'filters.defectStatus.$eq', 'filters[defectStatus][$eq]');
         if ($defectStatus) {
             $query->where('defect_status', $defectStatus);
         }
 
-        // Filter: promo not null — support hasPromo=true (frontend simple format)
+        // Filter: promo not null
         if ($request->boolean('hasPromo')) {
             $query->whereNotNull('promo_id');
         }
@@ -107,9 +122,9 @@ class VehicleController extends Controller
             $query->orderBy($dbField, $direction);
         }
 
-        // Pagination
-        $page = (int) $request->input('pagination[page]', 1);
-        $pageSize = (int) $request->input('pagination[pageSize]', 20);
+        // Pagination — parse from raw query string too
+        $page = (int) ($this->parseStrapiParam($request, 'pagination.page', 'pagination[page]', '1'));
+        $pageSize = (int) ($this->parseStrapiParam($request, 'pagination.pageSize', 'pagination[pageSize]', '20'));
 
         $total = $query->count();
         $vehicles = $query->skip(($page - 1) * $pageSize)->take($pageSize)->get();
