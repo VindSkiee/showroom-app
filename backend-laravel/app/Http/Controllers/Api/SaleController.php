@@ -30,6 +30,14 @@ class SaleController extends Controller
             $query->where('car_id', $request->input('filters[car][$eq]'));
         }
 
+        if ($request->filled('filters[saleDate][$gte]')) {
+            $query->where('sale_date', '>=', $request->input('filters[saleDate][$gte]'));
+        }
+
+        if ($request->filled('filters[saleDate][$lte]')) {
+            $query->where('sale_date', '<=', $request->input('filters[saleDate][$lte]'));
+        }
+
         if ($request->filled('sort')) {
             $sortParts = explode(':', $request->sort);
             $field = $sortParts[0];

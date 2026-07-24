@@ -22,7 +22,7 @@ export async function PUT(
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ data: body }),
+        body: JSON.stringify(body),
       }
     );
 

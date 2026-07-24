@@ -29,22 +29,63 @@ class VehicleController extends Controller
         }
 
         // Filter: name contains
-        if ($request->filled('filters[name][$containsi]')) {
-            $query->where('name', 'LIKE', '%' . $request->input('filters[name][$containsi]') . '%');
+        $nameFilter = $request->input('filters.name.$containsi')
+            ?? $request->input('filters[name][$containsi]');
+        if ($nameFilter) {
+            $query->where('name', 'LIKE', '%' . $nameFilter . '%');
         }
 
         // Filter: price gte
-        if ($request->filled('filters[price][$gte]')) {
-            $query->where('price', '>=', $request->input('filters[price][$gte]'));
+        $priceGte = $request->input('filters.price.$gte')
+            ?? $request->input('filters[price][$gte]');
+        if ($priceGte) {
+            $query->where('price', '>=', $priceGte);
         }
 
         // Filter: price lte
-        if ($request->filled('filters[price][$lte]')) {
-            $query->where('price', '<=', $request->input('filters[price][$lte]'));
+        $priceLte = $request->input('filters.price.$lte')
+            ?? $request->input('filters[price][$lte]');
+        if ($priceLte) {
+            $query->where('price', '<=', $priceLte);
         }
 
-        // Filter: promo not null
-        if ($request->input('filters[promo][$notNull]') === 'true') {
+        // Filter: year gte
+        $yearGte = $request->input('filters.year.$gte')
+            ?? $request->input('filters[year][$gte]');
+        if ($yearGte) {
+            $query->where('year', '>=', $yearGte);
+        }
+
+        // Filter: year lte
+        $yearLte = $request->input('filters.year.$lte')
+            ?? $request->input('filters[year][$lte]');
+        if ($yearLte) {
+            $query->where('year', '<=', $yearLte);
+        }
+
+        // Filter: documentStatus
+        $docStatus = $request->input('filters.documentStatus.$eq')
+            ?? $request->input('filters[documentStatus][$eq]');
+        if ($docStatus) {
+            $query->where('document_status', $docStatus);
+        }
+
+        // Filter: taxStatus
+        $taxStatus = $request->input('filters.taxStatus.$eq')
+            ?? $request->input('filters[taxStatus][$eq]');
+        if ($taxStatus) {
+            $query->where('tax_status', $taxStatus);
+        }
+
+        // Filter: defectStatus
+        $defectStatus = $request->input('filters.defectStatus.$eq')
+            ?? $request->input('filters[defectStatus][$eq]');
+        if ($defectStatus) {
+            $query->where('defect_status', $defectStatus);
+        }
+
+        // Filter: promo not null — support hasPromo=true (frontend simple format)
+        if ($request->boolean('hasPromo')) {
             $query->whereNotNull('promo_id');
         }
 
@@ -98,6 +139,23 @@ class VehicleController extends Controller
 
         return response()->json([
             'data' => new VehicleResource($vehicle),
+        ]);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $vehicle = Vehicle::findOrFail($id);
+
+        $validated = $request->validate([
+            'stock' => 'sometimes|integer|min:0',
+            'stock_sold' => 'sometimes|integer|min:0',
+            'availability_status' => 'sometimes|in:available,sold_out',
+        ]);
+
+        $vehicle->update($validated);
+
+        return response()->json([
+            'data' => new VehicleResource($vehicle->fresh()),
         ]);
     }
 }

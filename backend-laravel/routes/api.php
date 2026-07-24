@@ -50,6 +50,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // Logout
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 
+    // Vehicles update (stock)
+    Route::put('/vehicles/{id}', [VehicleController::class, 'update']);
+
+    // Cars update (stock)
+    Route::put('/cars/{id}', [CarController::class, 'update']);
+
     // Sales CRUD
     Route::get('/sales', [SaleController::class, 'index']);
     Route::post('/sales', [SaleController::class, 'store']);

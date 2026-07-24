@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:8000";
 
 const nextConfig: NextConfig = {
   images: {
@@ -8,8 +8,19 @@ const nextConfig: NextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
-        port: "1337",
+        port: "8000",
+        pathname: "/storage/**",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "8000",
         pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.up.railway.app",
+        pathname: "/storage/**",
       },
       {
         protocol: "https",
@@ -24,7 +35,7 @@ const nextConfig: NextConfig = {
         source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Origin", value: strapiUrl },
-          { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS" },
+          { key: "Access-Control-Allow-Methods", value: "GET,POST,PUT,DELETE,OPTIONS" },
         ],
       },
     ];

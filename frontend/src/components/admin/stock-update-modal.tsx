@@ -87,9 +87,9 @@ export function StockUpdateModal({
         };
 
         if (type === "motor") {
-          payload.vehicleDocumentId = item.documentId;
+          payload.vehicleId = Number(item.documentId);
         } else {
-          payload.carDocumentId = item.documentId;
+          payload.carId = Number(item.documentId);
         }
 
         const res = await fetch("/api/sales", {

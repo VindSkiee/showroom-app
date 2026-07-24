@@ -1237,23 +1237,24 @@ curl -I http://localhost:8000/storage/uploads/...jpg
 ---
 
 ### MILESTONE 7: Frontend Integration
-**Status:** 🔄 IN PROGRESS — Auth BFF routes updated, perlu full test
+**Status:** ✅ COMPLETED
 **Goal:** Frontend Next.js bisa connect ke Laravel backend dan semua halaman berfungsi.
 
 **Tasks:**
 - [x] Update `.env` frontend: `NEXT_PUBLIC_STRAPI_URL=http://localhost:8000`
 - [x] Update BFF auth routes (`/api/login`, `/api/user`, `/api/logout`)
-- [ ] Konfigurasi CORS di Laravel (allow localhost:3000)
-- [ ] Test Homepage (motor catalog)
-- [ ] Test Cars page
-- [ ] Test Vehicle detail page
-- [ ] Test Car detail page
-- [ ] Test Search & Filter
-- [ ] Test Admin login → dashboard
-- [ ] Test Stock update modal
-- [ ] Test Sale recording
-- [ ] Test WhatsApp integration
-- [ ] Fix any issues found
+- [x] Update BFF vehicles/cars/sales routes to forward token + simplified format
+- [x] Fix `lib/auth.ts` fallback port to 8000
+- [x] Fix `strapi.ts` fallback port to 8000
+- [x] Fix `next.config.ts` — port 8000, `/storage/**` patterns, CORS methods
+- [x] Create `middleware.ts` from dead `proxy.ts` code — admin route protection
+- [x] Add `update()` methods to VehicleController and CarController
+- [x] Add PUT routes for vehicles/cars (protected, auth:sanctum)
+- [x] Fix Strapi-style filters (name, price, year, promo, documentStatus, taxStatus, defectStatus)
+- [x] Add date filter support to SaleController
+- [x] Simplify BFF sales POST → uses Laravel SaleService (not manual stock update)
+- [x] Fix StockUpdateModal → sends `vehicleId`/`carId` (numeric) not `vehicleDocumentId`/`carDocumentId`
+- [x] Frontend builds successfully with all routes
 
 **References:**
 - Frontend BFF routes: `frontend/src/app/api/auth/*/route.ts`

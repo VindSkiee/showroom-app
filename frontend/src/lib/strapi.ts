@@ -1,6 +1,6 @@
 import type { StrapiResponse, StrapiSingleResponse, Vehicle, VehicleFilters, Car, CarFilters, Promo, Sale } from "./types";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:8000";
 
 export async function fetchStrapi<T>(
   endpoint: string,
@@ -102,7 +102,7 @@ function buildVehicleParams(filters?: VehicleFilters): string {
   if (filters.defectStatus)
     params.set("filters[defectStatus][$eq]", filters.defectStatus);
   if (filters.name) params.set("filters[name][$containsi]", filters.name);
-  if (filters.hasPromo) params.set("filters[promo][$notNull]", "true");
+  if (filters.hasPromo) params.set("hasPromo", "true");
   if (filters.priceMin)
     params.set("filters[price][$gte]", String(filters.priceMin));
   if (filters.priceMax)
@@ -137,7 +137,7 @@ function buildCarParams(filters?: CarFilters): string {
   if (filters.defectStatus)
     params.set("filters[defectStatus][$eq]", filters.defectStatus);
   if (filters.name) params.set("filters[name][$containsi]", filters.name);
-  if (filters.hasPromo) params.set("filters[promo][$notNull]", "true");
+  if (filters.hasPromo) params.set("hasPromo", "true");
   if (filters.priceMin)
     params.set("filters[price][$gte]", String(filters.priceMin));
   if (filters.priceMax)
